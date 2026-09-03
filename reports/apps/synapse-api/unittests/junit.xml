@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="1.390" timestamp="2026-09-03T20:44:39.678978+05:30" hostname="sarath"><testcase classname="" name="tests.test_hello" time="0.000"><error message="collection failure">ImportError while importing test module '/home/sarath/Projects/synapse/apps/synapse-api/tests/test_hello.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../../../.local/share/uv/python/cpython-3.12.12-linux-x86_64-gnu/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_hello.py:3: in &lt;module&gt;
+    from synapse_api.hello import hello
+E   ModuleNotFoundError: No module named 'synapse_api.hello'</error></testcase></testsuite></testsuites>

@@ -1,46 +1,34 @@
 import {
-  Anchor,
-  Button,
-  Checkbox,
-  Container,
-  Flex,
-  Group,
-  Paper,
-  PasswordInput,
-  Text,
-  TextInput,
-  Title,
-  Image
-} from '@mantine/core';
-import classes from './style.module.css';
+	Center,
+	Flex,
+	Group,
+	Image,
+	Paper,
+	Stack,
+	Text,
+	Title,
+} from "@mantine/core";
+import { useNavigate } from "@tanstack/react-router";
+import { LoginForm } from "./components/login-form";
+import { TitleSegment } from "./components/title-segment";
+import classes from "./style.module.css";
 
 export function AuthenticationTitle() {
-  return (
-    <Container size={420} my={40}>
-        <Flex gap={2}><Image src="logo.png" />
-        <Title ta="center" className={classes.title}>
-        Sami Synapse
-      </Title>
-      </Flex>
-      
+	const navigate = useNavigate();
 
-      <Text className={classes.subtitle}>
-        Do not have an account yet? <Anchor>Create account</Anchor>
-      </Text>
+	return (
+		<Flex className={classes.wrapper}>
+			<Stack align="center" gap="lg">
+				<div className={classes.brand}>
+					<TitleSegment />
+				</div>
 
-      <Paper withBorder shadow="sm" p={22} mt={30} radius="md">
-        <TextInput label="Email" placeholder="you@mantine.dev" required radius="md" />
-        <PasswordInput label="Password" placeholder="Your password" required mt="md" radius="md" />
-        <Group justify="space-between" mt="lg">
-          <Checkbox label="Remember me" />
-          <Anchor component="button" size="sm">
-            Forgot password?
-          </Anchor>
-        </Group>
-        <Button fullWidth mt="xl" radius="md">
-          Sign in
-        </Button>
-      </Paper>
-    </Container>
-  );
+				<Paper className={classes.formCard}>
+					<Stack gap="lg">
+						<LoginForm onSuccess={() => navigate({ to: "/dashboard" })} />
+					</Stack>
+				</Paper>
+			</Stack>
+		</Flex>
+	);
 }

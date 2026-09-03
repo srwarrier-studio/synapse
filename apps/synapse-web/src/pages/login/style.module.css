@@ -1,11 +1,88 @@
-.title {
-  font-family: Outfit, var(--mantine-font-family);
-  font-weight: 500;
+.wrapper {
+	min-height: 100dvh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(160deg, #0b1a3e 0%, #0d2f6b 40%, #1565c0 100%);
+	padding: 2rem;
+	position: relative;
+	overflow: hidden;
 }
 
-.subtitle {
-  color: var(--mantine-color-dimmed);
-  font-size: var(--mantine-font-size-sm);
-  text-align: center;
-  margin-top: 5px;
+.wrapper::before {
+	content: "";
+	position: absolute;
+	top: -30%;
+	right: -20%;
+	width: 600px;
+	height: 600px;
+	background: radial-gradient(
+		circle,
+		rgba(100, 181, 246, 0.15) 0%,
+		transparent 70%
+	);
+	border-radius: 50%;
+	pointer-events: none;
+}
+
+.wrapper::after {
+	content: "";
+	position: absolute;
+	bottom: -20%;
+	left: -10%;
+	width: 500px;
+	height: 500px;
+	background: radial-gradient(
+		circle,
+		rgba(66, 165, 245, 0.1) 0%,
+		transparent 70%
+	);
+	border-radius: 50%;
+	pointer-events: none;
+}
+
+.brand {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 2rem;
+}
+
+.logoRow {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.logoWrapper {
+	background-color: #fff;
+	border-radius: 14px;
+	padding: 12px;
+	display: inline-flex;
+}
+
+.brandTitle {
+	font-family: Outfit, var(--mantine-font-family);
+	font-weight: 600;
+	font-size: 2rem;
+	color: #fff;
+	letter-spacing: -0.01em;
+}
+
+.brandTagline {
+	font-size: 0.9375rem;
+	color: rgba(255, 255, 255, 0.75);
+	font-weight: 400;
+	margin-top: 0;
+}
+
+.formCard {
+	width: 100%;
+	max-width: 400px;
+	background-color: #fff;
+	border-radius: 16px;
+	padding: 2rem;
+	box-shadow:
+		0 4px 6px rgba(0, 0, 0, 0.03),
+		0 12px 24px rgba(0, 0, 0, 0.08);
 }

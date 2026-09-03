@@ -1,3 +1,4 @@
+from .auth import LoginRequest, LoginResponse
 from .dashboard import DashboardSummary, MoneySchema, SalesTrendPoint, TopProduct
 from .inventory import (
     MaterialMovementSchema,
@@ -14,6 +15,8 @@ from .purchases import (
 from .sales import SalesItemSchema, SalesOrderListResponse, SalesOrderSchema
 
 __all__ = [
+    "LoginRequest",
+    "LoginResponse",
     "MoneySchema",
     "DashboardSummary",
     "SalesTrendPoint",

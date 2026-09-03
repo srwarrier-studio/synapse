@@ -4,10 +4,10 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { theme } from "../theme";
 
 const RootLayout = () => (
-  <MantineProvider theme={theme}>
-    <Outlet />
-    <TanStackRouterDevtools />
-  </MantineProvider>
+	<MantineProvider theme={theme}>
+		<Outlet />
+		<TanStackRouterDevtools />
+	</MantineProvider>
 );
 
 export const Route = createRootRoute({ component: RootLayout });
