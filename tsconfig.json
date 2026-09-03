@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./synapse-web"
+    },
+    {
+      "path": "./apps/synapse-web"
+    }
+  ],
+  "compilerOptions": {}
+}
