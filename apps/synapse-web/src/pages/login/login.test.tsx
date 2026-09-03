@@ -1,6 +1,5 @@
-import { expect, test } from 'vitest'
-import { AuthenticationTitle } from './index.tsx'
+import { expect, test } from "vitest";
 
-test('loads the page', () => {
-  expect(sum(1, 2)).toBe(3)
-})
+test("loads the page", () => {
+	expect(sum(1, 2)).toBe(3);
+});

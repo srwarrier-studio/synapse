@@ -54,3 +54,5 @@ vitest.config.*.timestamp*
 .venv
 __pycache__
 .env
+*.db
+*.db-journal
