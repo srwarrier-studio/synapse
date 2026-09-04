@@ -111,3 +111,31 @@ code {
 	border-radius: 2px;
 	color: var(--text);
 }
+
+.react-grid-placeholder {
+	background: var(--accent-bg) !important;
+	border: 2px dashed var(--accent-border) !important;
+	border-radius: var(--mantine-radius-sm, 4px);
+	opacity: 1 !important;
+}
+
+.react-grid-item {
+	border: none !important;
+	outline: none !important;
+}
+
+.react-grid-item > .react-resizable-handle {
+	transition: opacity 150ms ease;
+}
+
+.dashboard-view:not(.dashboard-editing) .react-grid-item > .react-resizable-handle {
+	display: none;
+}
+
+.dashboard-view:not(.dashboard-editing) .react-grid-item.react-draggable-dragging {
+	opacity: 0.5;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+	border-color: var(--accent) !important;
+}

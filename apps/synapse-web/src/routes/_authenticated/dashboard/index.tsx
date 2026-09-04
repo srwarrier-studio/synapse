@@ -1,23 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Alert, SimpleGrid, Skeleton, Stack, Title } from "@mantine/core";
+import { Alert, Group, Stack, Title, Button, Drawer } from "@mantine/core";
+import { useState } from "react";
 import {
-	IconCurrencyDollar,
-	IconShoppingCart,
-	IconTruck,
-	IconPackage,
 	IconAlertTriangle,
+	IconLayoutSidebar,
+	IconEdit,
+	IconCheck,
 } from "@tabler/icons-react";
-import {
-	KPICard,
-	SalesTrendChart,
-	TopProductsChart,
-	RegionalPerformance,
-	OrderStatusChart,
-	MonthlyRevenueChart,
-	CategoryBreakdown,
-	RecentOrdersTable,
-} from "../../../components/dashboard";
+import { DashboardGrid, DashboardSidebar } from "../../../components/dashboard";
 import { useDashboard } from "../../../hooks/useDashboard";
+import { useDashboardLayout } from "../../../hooks/useDashboardLayout";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
 	component: DashboardIndex,
@@ -37,6 +29,19 @@ function DashboardIndex() {
 		error,
 	} = useDashboard();
 
+	const {
+		widgets,
+		gridLayout,
+		onLayoutChange,
+		addWidget,
+		removeWidget,
+		applyTemplate,
+		resetLayout,
+	} = useDashboardLayout();
+
+	const [sidebarOpen, setSidebarOpen] = useState(false);
+	const [isEditing, setIsEditing] = useState(false);
+
 	if (error) {
 		return (
 			<Stack gap="md">
@@ -48,76 +53,80 @@ function DashboardIndex() {
 		);
 	}
 
-	if (isLoading) {
-		return (
-			<Stack gap="md">
-				<Title order={4}>Dashboard</Title>
-				<SimpleGrid cols={4}>
-					{Array.from({ length: 4 }).map((_, i) => (
-						<Skeleton key={i} height={120} radius="sm" />
-					))}
-				</SimpleGrid>
-				<SimpleGrid cols={2}>
-					<Skeleton height={350} radius="sm" />
-					<Skeleton height={350} radius="sm" />
-				</SimpleGrid>
-				<SimpleGrid cols={2}>
-					<Skeleton height={300} radius="sm" />
-					<Skeleton height={300} radius="sm" />
-				</SimpleGrid>
-			</Stack>
-		);
-	}
-
 	return (
-		<Stack gap="md">
-			<Title order={4}>Dashboard</Title>
+		<Stack gap="md" h="100%">
+			<Group justify="space-between">
+				<Title order={4}>Dashboard</Title>
+				<Group gap="xs">
+					{isEditing ? (
+						<Button
+							leftSection={<IconCheck size={16} />}
+							variant="filled"
+							size="sm"
+							onClick={() => setIsEditing(false)}
+						>
+							Done
+						</Button>
+					) : (
+						<Button
+							leftSection={<IconEdit size={16} />}
+							variant="light"
+							size="sm"
+							onClick={() => setIsEditing(true)}
+						>
+							Edit
+						</Button>
+					)}
+					<Button
+						leftSection={<IconLayoutSidebar size={16} />}
+						variant="light"
+						size="sm"
+						onClick={() => setSidebarOpen(true)}
+					>
+						Add Views
+					</Button>
+				</Group>
+			</Group>
 
-			<SimpleGrid cols={4}>
-				<KPICard
-					title="Revenue"
-					value={`₹${(summary?.revenue ?? 0).toLocaleString()}`}
-					change={summary?.revenue_change}
-					icon={<IconCurrencyDollar size={20} />}
-					color="synapse-blue"
+			{isLoading ? (
+				<div>Loading...</div>
+			) : (
+				<DashboardGrid
+					widgets={widgets}
+					gridLayout={gridLayout}
+					onLayoutChange={onLayoutChange}
+					onRemoveWidget={isEditing ? removeWidget : undefined}
+					isEditing={isEditing}
+					summary={summary}
+					salesTrend={salesTrend}
+					topProducts={topProducts}
+					regionPerformance={regionPerformance}
+					orderStatus={orderStatus}
+					monthlyRevenue={monthlyRevenue}
+					categoryBreakdown={categoryBreakdown}
+					recentOrders={recentOrders}
 				/>
-				<KPICard
-					title="Orders"
-					value={(summary?.orders ?? 0).toLocaleString()}
-					change={summary?.orders_change}
-					icon={<IconShoppingCart size={20} />}
-					color="sami-green"
+			)}
+
+			<Drawer
+				opened={sidebarOpen}
+				onClose={() => setSidebarOpen(false)}
+				title="Add Views"
+				position="right"
+				size="sm"
+			>
+				<DashboardSidebar
+					onApplyTemplate={(templateId: string) => {
+						applyTemplate(templateId);
+						setSidebarOpen(false);
+					}}
+					onAddWidget={addWidget}
+					onReset={() => {
+						resetLayout();
+						setSidebarOpen(false);
+					}}
 				/>
-				<KPICard
-					title="Fulfillment Rate"
-					value={`${summary?.fulfillment_rate ?? 0}%`}
-					icon={<IconTruck size={20} />}
-					color="teal"
-				/>
-				<KPICard
-					title="Active Shipments"
-					value={(summary?.active_shipments ?? 0).toLocaleString()}
-					icon={<IconPackage size={20} />}
-					color="orange"
-				/>
-			</SimpleGrid>
-
-			<SimpleGrid cols={2}>
-				<SalesTrendChart data={salesTrend} />
-				<TopProductsChart data={topProducts} />
-			</SimpleGrid>
-
-			<SimpleGrid cols={2}>
-				<MonthlyRevenueChart data={monthlyRevenue} />
-				<OrderStatusChart data={orderStatus} />
-			</SimpleGrid>
-
-			<SimpleGrid cols={2}>
-				<CategoryBreakdown data={categoryBreakdown} />
-				<RegionalPerformance data={regionPerformance} />
-			</SimpleGrid>
-
-			<RecentOrdersTable data={recentOrders} />
+			</Drawer>
 		</Stack>
 	);
 }

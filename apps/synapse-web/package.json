@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"@mantine/core": "^9.6.0",
+		"@mantine/dropzone": "^9.6.0",
 		"@mantine/form": "^9.6.0",
 		"@mantine/hooks": "^9.6.0",
 		"@tabler/icons-react": "^3.46.0",
@@ -20,7 +21,9 @@
 		"@testing-library/jest-dom": "^7.0.1",
 		"react": "^19.2.8",
 		"react-charts": "3.0.0-beta.57",
-		"react-dom": "^19.2.8"
+		"react-dom": "^19.2.8",
+		"react-grid-layout": "^2.2.4",
+		"react-resizable": "^4.0.2"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.29.7",
@@ -30,6 +33,7 @@
 		"@types/node": "^24.13.3",
 		"@types/react": "^19.2.18",
 		"@types/react-dom": "^19.2.4",
+		"@types/react-grid-layout": "^2.1.0",
 		"@vitejs/plugin-react": "^6.1.0",
 		"babel-plugin-react-compiler": "^1.0.0",
 		"oxlint": "^1.79.0",

@@ -6,3 +6,6 @@ export { OrderStatusChart } from "./OrderStatusChart";
 export { MonthlyRevenueChart } from "./MonthlyRevenueChart";
 export { CategoryBreakdown } from "./CategoryBreakdown";
 export { RecentOrdersTable } from "./RecentOrdersTable";
+export { DraggableChart } from "./DraggableChart";
+export { DashboardSidebar } from "./DashboardSidebar";
+export { DashboardGrid } from "./DashboardGrid";
