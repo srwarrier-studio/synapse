@@ -13,10 +13,13 @@
 		"@mantine/core": "^9.6.0",
 		"@mantine/form": "^9.6.0",
 		"@mantine/hooks": "^9.6.0",
+		"@tabler/icons-react": "^3.46.0",
+		"@tanstack/charts": "^0.16.0",
 		"@tanstack/react-router": "^1.170.32",
 		"@tanstack/react-router-devtools": "^1.167.1",
 		"@testing-library/jest-dom": "^7.0.1",
 		"react": "^19.2.8",
+		"react-charts": "3.0.0-beta.57",
 		"react-dom": "^19.2.8"
 	},
 	"devDependencies": {

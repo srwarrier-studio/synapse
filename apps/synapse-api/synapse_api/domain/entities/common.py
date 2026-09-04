@@ -12,8 +12,12 @@ class Currency(StrEnum):
 
 class Region(StrEnum):
     INDIA = "INDIA"
+    NORTH_AMERICA = "NORTH_AMERICA"
+    EUROPE = "EUROPE"
     SOUTHEAST_ASIA = "SOUTHEAST_ASIA"
     MIDDLE_EAST = "MIDDLE_EAST"
+    EAST_ASIA = "EAST_ASIA"
+    LATIN_AMERICA = "LATIN_AMERICA"
 
 
 class OrderStatus(StrEnum):

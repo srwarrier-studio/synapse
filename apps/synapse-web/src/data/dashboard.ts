@@ -1,5 +1,10 @@
 import type {
+	CategoryBreakdown,
 	DashboardSummary,
+	MonthlyRevenue,
+	OrderStatus,
+	RecentOrder,
+	RegionalPerformance,
 	SalesTrendPoint,
 	TopProduct,
 } from "../domain/entities/dashboard";
@@ -15,4 +20,24 @@ export function fetchSalesTrend(): Promise<SalesTrendPoint[]> {
 
 export function fetchTopProducts(): Promise<TopProduct[]> {
 	return request("/api/dashboard/top-products");
+}
+
+export function fetchRegionalPerformance(): Promise<RegionalPerformance[]> {
+	return request("/api/dashboard/regional-performance");
+}
+
+export function fetchOrderStatus(): Promise<OrderStatus[]> {
+	return request("/api/dashboard/order-status");
+}
+
+export function fetchMonthlyRevenue(): Promise<MonthlyRevenue[]> {
+	return request("/api/dashboard/monthly-revenue");
+}
+
+export function fetchCategoryBreakdown(): Promise<CategoryBreakdown[]> {
+	return request("/api/dashboard/category-breakdown");
+}
+
+export function fetchRecentOrders(): Promise<RecentOrder[]> {
+	return request("/api/dashboard/recent-orders");
 }
