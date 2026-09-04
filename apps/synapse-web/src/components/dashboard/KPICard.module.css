@@ -1,0 +1,14 @@
+.card {
+	background: var(--mantine-color-white);
+}
+
+.title {
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.value {
+	font-size: var(--mantine-font-size-xl);
+	line-height: 1.2;
+	margin-top: var(--mantine-spacing-xs);
+}

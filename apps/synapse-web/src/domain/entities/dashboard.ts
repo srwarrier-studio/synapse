@@ -18,3 +18,39 @@ export interface TopProduct {
 	revenue: number;
 	units: number;
 }
+
+export interface RegionalPerformance {
+	region: string;
+	ytd_revenue: number;
+	latest_month: number;
+	growth_rate: number;
+}
+
+export interface OrderStatus {
+	status: string;
+	count: number;
+	percentage: number;
+}
+
+export interface MonthlyRevenue {
+	month: string;
+	revenue: number;
+	orders: number;
+}
+
+export interface CategoryBreakdown {
+	category: string;
+	revenue: number;
+	percentage: number;
+	product_count: number;
+}
+
+export interface RecentOrder {
+	order_id: string;
+	customer: string;
+	product: string;
+	amount: number;
+	status: string;
+	date: string;
+	region: string;
+}

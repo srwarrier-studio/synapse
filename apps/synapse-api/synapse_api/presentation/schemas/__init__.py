@@ -1,5 +1,14 @@
 from .auth import LoginRequest, LoginResponse
-from .dashboard import DashboardSummary, MoneySchema, SalesTrendPoint, TopProduct
+from .dashboard import (
+    CategoryBreakdown,
+    DashboardSummary,
+    MonthlyRevenue,
+    OrderStatus,
+    RecentOrder,
+    RegionalPerformance,
+    SalesTrendPoint,
+    TopProduct,
+)
 from .inventory import (
     MaterialMovementSchema,
     MovementListResponse,
@@ -17,8 +26,12 @@ from .sales import SalesItemSchema, SalesOrderListResponse, SalesOrderSchema
 __all__ = [
     "LoginRequest",
     "LoginResponse",
-    "MoneySchema",
+    "CategoryBreakdown",
     "DashboardSummary",
+    "MonthlyRevenue",
+    "OrderStatus",
+    "RecentOrder",
+    "RegionalPerformance",
     "SalesTrendPoint",
     "TopProduct",
     "SalesItemSchema",

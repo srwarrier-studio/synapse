@@ -1,0 +1,10 @@
+.regionCard {
+	padding: var(--mantine-spacing-md);
+	background: var(--mantine-color-gray-0);
+	border-radius: var(--mantine-radius-sm);
+}
+
+.regionValue {
+	font-size: var(--mantine-font-size-xl);
+	line-height: 1.2;
+}
