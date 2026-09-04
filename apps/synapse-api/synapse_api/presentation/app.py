@@ -7,6 +7,7 @@ from .routers import (
     inventory_router,
     purchases_router,
     sales_router,
+    widget_router,
 )
 
 
@@ -30,6 +31,7 @@ def create_app() -> FastAPI:
     app.include_router(sales_router)
     app.include_router(purchases_router)
     app.include_router(inventory_router)
+    app.include_router(widget_router)
 
     @app.get("/health")
     async def healthcheck():

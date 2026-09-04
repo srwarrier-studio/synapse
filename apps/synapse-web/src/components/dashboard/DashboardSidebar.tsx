@@ -14,7 +14,11 @@ import {
 	IconBriefcase,
 	IconTruck,
 	IconChartBar,
-	IconPackages,
+	IconFlask,
+	IconBuildingFactory,
+	IconClipboardCheck,
+	IconUsers,
+	IconRoute,
 	IconPlus,
 	IconRotate,
 	IconChevronRight,
@@ -22,21 +26,20 @@ import {
 import type { WidgetType } from "../../domain/entities/dashboard-layout";
 import {
 	ALL_WIDGET_TYPES,
+	dashboardTemplates,
 	WIDGET_CATEGORY_LABELS,
-	type WidgetCategory,
 } from "../../domain/entities/dashboard-templates";
-import { dashboardTemplates } from "../../domain/entities/dashboard-templates";
-
-const ICON_MAP: Record<string, typeof IconBriefcase> = {
-	IconBriefcase,
-	IconTruck,
-	IconChartBar,
-};
+import type { WidgetCategory } from "../../domain/entities/widget";
 
 const CATEGORY_ICONS: Record<WidgetCategory, typeof IconBriefcase> = {
 	finance: IconChartBar,
 	operations: IconTruck,
-	materials: IconPackages,
+	research: IconFlask,
+	manufacturing: IconBuildingFactory,
+	quality: IconClipboardCheck,
+	sales: IconBriefcase,
+	"supply-chain": IconRoute,
+	hr: IconUsers,
 };
 
 interface DashboardSidebarProps {
@@ -53,7 +56,12 @@ export function DashboardSidebar({
 	const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({
 		finance: true,
 		operations: true,
-		materials: true,
+		manufacturing: false,
+		quality: false,
+		sales: false,
+		"supply-chain": false,
+		research: false,
+		hr: false,
 	});
 
 	const toggleCategory = (cat: string) => {
@@ -78,7 +86,7 @@ export function DashboardSidebar({
 
 				<Stack gap="xs">
 					{dashboardTemplates.map((template) => {
-						const Icon = ICON_MAP[template.icon] || IconChartBar;
+						const Icon = CATEGORY_ICONS[template.id as WidgetCategory] || IconChartBar;
 						return (
 							<UnstyledButton
 								key={template.id}
@@ -145,9 +153,9 @@ export function DashboardSidebar({
 								<Stack gap="xs" pl="md">
 									{widgets.map((widget) => (
 										<UnstyledButton
-											key={widget.type}
-											onClick={() => onAddWidget(widget.type)}
-											p="sm"
+											key={widget.id}
+											onClick={() => onAddWidget(widget.type as WidgetType)}
+											p="xs"
 											style={(theme) => ({
 												border: `1px solid ${theme.colors.defaultColor}`,
 												borderRadius: theme.radius.sm,
@@ -157,8 +165,15 @@ export function DashboardSidebar({
 											})}
 										>
 											<Group gap="sm">
-												<IconPlus size={14} />
-												<Text size="sm">{widget.label}</Text>
+												<IconPlus size={12} />
+												<Stack gap={1}>
+													<Text size="xs" fw={500}>
+														{widget.label}
+													</Text>
+													<Text size="xs" c="dimmed">
+														{widget.chartType.charAt(0).toUpperCase() + widget.chartType.slice(1)}
+													</Text>
+												</Stack>
 											</Group>
 										</UnstyledButton>
 									))}
