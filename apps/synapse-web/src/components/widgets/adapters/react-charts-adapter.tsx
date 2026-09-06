@@ -8,8 +8,6 @@ import type {
 	PieChartProps,
 	DonutChartProps,
 	AreaChartProps,
-	TimeSeriesPoint,
-	ChartDataPoint,
 } from "../chart-adapter";
 
 type LineDatum = {
@@ -63,7 +61,7 @@ function useCategoryAxes(elementType?: "bar") {
 	return { primaryAxis, secondaryAxes };
 }
 
-function renderLineChart({ data, height }: LineChartProps) {
+function renderLineChart({ data }: LineChartProps) {
 	const chartData = data.map((series) => ({
 		label: series.label,
 		data: series.data.map((point) => ({
@@ -72,20 +70,18 @@ function renderLineChart({ data, height }: LineChartProps) {
 		})),
 	}));
 
-	return <LineChartInner data={chartData} height={height} />;
+	return <LineChartInner data={chartData} />;
 }
 
 function LineChartInner({
 	data,
-	height,
 }: {
 	data: Array<{ label: string; data: LineDatum[] }>;
-	height: number;
 }) {
 	const { primaryAxis, secondaryAxes } = useLineAxes();
 
 	return (
-		<div style={{ height }}>
+		<div style={{ width: "100%", height: "100%" }}>
 			<Chart
 				options={{
 					data,
@@ -97,7 +93,7 @@ function LineChartInner({
 	);
 }
 
-function renderBarChart({ data, height }: BarChartProps) {
+function renderBarChart({ data }: BarChartProps) {
 	const chartData = [
 		{
 			label: "Value",
@@ -108,20 +104,18 @@ function renderBarChart({ data, height }: BarChartProps) {
 		},
 	];
 
-	return <BarChartInner data={chartData} height={height} />;
+	return <BarChartInner data={chartData} />;
 }
 
 function BarChartInner({
 	data,
-	height,
 }: {
 	data: Array<{ label: string; data: CategoryDatum[] }>;
-	height: number;
 }) {
 	const { primaryAxis, secondaryAxes } = useCategoryAxes("bar");
 
 	return (
-		<div style={{ height }}>
+		<div style={{ width: "100%", height: "100%" }}>
 			<Chart
 				options={{
 					data,
@@ -133,7 +127,7 @@ function BarChartInner({
 	);
 }
 
-function renderPieChart({ data, height }: PieChartProps) {
+function renderPieChart({ data }: PieChartProps) {
 	const chartData = [
 		{
 			label: "Value",
@@ -144,20 +138,18 @@ function renderPieChart({ data, height }: PieChartProps) {
 		},
 	];
 
-	return <PieChartInner data={chartData} height={height} />;
+	return <PieChartInner data={chartData} />;
 }
 
 function PieChartInner({
 	data,
-	height,
 }: {
 	data: Array<{ label: string; data: CategoryDatum[] }>;
-	height: number;
 }) {
 	const { primaryAxis, secondaryAxes } = useCategoryAxes();
 
 	return (
-		<div style={{ height }}>
+		<div style={{ width: "100%", height: "100%" }}>
 			<Chart
 				options={{
 					data,
@@ -169,7 +161,7 @@ function PieChartInner({
 	);
 }
 
-function renderDonutChart({ data, height }: DonutChartProps) {
+function renderDonutChart({ data }: DonutChartProps) {
 	const chartData = [
 		{
 			label: "Value",
@@ -180,20 +172,18 @@ function renderDonutChart({ data, height }: DonutChartProps) {
 		},
 	];
 
-	return <DonutChartInner data={chartData} height={height} />;
+	return <DonutChartInner data={chartData} />;
 }
 
 function DonutChartInner({
 	data,
-	height,
 }: {
 	data: Array<{ label: string; data: CategoryDatum[] }>;
-	height: number;
 }) {
 	const { primaryAxis, secondaryAxes } = useCategoryAxes();
 
 	return (
-		<div style={{ height, position: "relative" }}>
+		<div style={{ width: "100%", height: "100%", position: "relative" }}>
 			<Chart
 				options={{
 					data,
@@ -205,7 +195,7 @@ function DonutChartInner({
 	);
 }
 
-function renderAreaChart({ data, height }: AreaChartProps) {
+function renderAreaChart({ data }: AreaChartProps) {
 	const chartData = data.map((series) => ({
 		label: series.label,
 		data: series.data.map((point) => ({
@@ -214,20 +204,18 @@ function renderAreaChart({ data, height }: AreaChartProps) {
 		})),
 	}));
 
-	return <AreaChartInner data={chartData} height={height} />;
+	return <AreaChartInner data={chartData} />;
 }
 
 function AreaChartInner({
 	data,
-	height,
 }: {
 	data: Array<{ label: string; data: LineDatum[] }>;
-	height: number;
 }) {
 	const { primaryAxis, secondaryAxes } = useLineAxes();
 
 	return (
-		<div style={{ height }}>
+		<div style={{ width: "100%", height: "100%" }}>
 			<Chart
 				options={{
 					data,

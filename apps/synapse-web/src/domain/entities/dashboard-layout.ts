@@ -48,21 +48,27 @@ export interface DashboardTemplate {
 	GridLayout: GridLayoutItem[];
 }
 
-export const WIDGET_DEFAULTS: Record<
-	WidgetType,
-	{ w: number; h: number; minW: number; minH: number }
-> = {
-	"kpi-revenue": { w: 3, h: 2, minW: 2, minH: 2 },
-	"kpi-orders": { w: 3, h: 2, minW: 2, minH: 2 },
-	"kpi-fulfillment": { w: 3, h: 2, minW: 2, minH: 2 },
-	"kpi-shipments": { w: 3, h: 2, minW: 2, minH: 2 },
-	"sales-trend": { w: 6, h: 4, minW: 4, minH: 4 },
-	"top-products": { w: 6, h: 4, minW: 4, minH: 4 },
-	"monthly-revenue": { w: 6, h: 4, minW: 4, minH: 4 },
-	"order-status": { w: 6, h: 4, minW: 4, minH: 4 },
-	"category-breakdown": { w: 6, h: 4, minW: 4, minH: 4 },
-	"regional-performance": { w: 6, h: 4, minW: 4, minH: 6 },
-	"recent-orders": { w: 12, h: 8, minW: 6, minH: 6 },
+export interface WidgetConstraints {
+	minW: number;
+	minH: number;
+	maxW: number;
+	maxH: number;
+	defaultW: number;
+	defaultH: number;
+}
+
+export const WIDGET_CONSTRAINTS: Record<WidgetType, WidgetConstraints> = {
+	"kpi-revenue":         { minW: 2, minH: 1, maxW: 4,  maxH: 2, defaultW: 3, defaultH: 1 },
+	"kpi-orders":          { minW: 2, minH: 1, maxW: 4,  maxH: 2, defaultW: 3, defaultH: 1 },
+	"kpi-fulfillment":     { minW: 2, minH: 1, maxW: 4,  maxH: 2, defaultW: 3, defaultH: 1 },
+	"kpi-shipments":       { minW: 2, minH: 1, maxW: 4,  maxH: 2, defaultW: 3, defaultH: 1 },
+	"sales-trend":         { minW: 4, minH: 2, maxW: 12, maxH: 6, defaultW: 6, defaultH: 3 },
+	"top-products":        { minW: 4, minH: 2, maxW: 12, maxH: 6, defaultW: 6, defaultH: 3 },
+	"monthly-revenue":     { minW: 4, minH: 2, maxW: 12, maxH: 6, defaultW: 6, defaultH: 3 },
+	"order-status":        { minW: 4, minH: 2, maxW: 12, maxH: 6, defaultW: 6, defaultH: 3 },
+	"category-breakdown":  { minW: 4, minH: 2, maxW: 12, maxH: 6, defaultW: 6, defaultH: 3 },
+	"regional-performance":{ minW: 4, minH: 2, maxW: 12, maxH: 6, defaultW: 6, defaultH: 3 },
+	"recent-orders":       { minW: 6, minH: 2, maxW: 12, maxH: 8, defaultW: 12, defaultH: 4 },
 };
 
 export const WIDGET_LABELS: Record<WidgetType, string> = {

@@ -9,10 +9,7 @@ interface BarChartProps {
 	title?: string;
 	valueLabel?: string;
 	showLegend?: boolean;
-	showTable?: boolean;
-	tableColumns?: Array<{ key: string; label: string }>;
 	formatValue?: (value: number) => string;
-	height?: number;
 }
 
 function transformData(data: CategoryDataPoint[]): ChartDataPoint[] {
@@ -29,18 +26,15 @@ export function BarChart({
 	title = "Bar Chart",
 	valueLabel,
 	showLegend = false,
-	showTable = false,
-	tableColumns,
 	formatValue = (v) => v.toLocaleString(),
-	height = 250,
 }: BarChartProps) {
 	const chart = useChartAdapter();
 
 	const chartData = useMemo(() => transformData(data), [data]);
 
 	return (
-		<Paper p="md" radius="sm">
-			<Group justify="space-between" mb="md">
+		<Paper p="md" radius="sm" h="100%" style={{ display: "flex", flexDirection: "column" }}>
+			<Group justify="space-between" mb="md" style={{ flexShrink: 0 }}>
 				<Text fw={600}>{title}</Text>
 				<Group gap="xs">
 					{valueLabel && (
@@ -53,9 +47,11 @@ export function BarChart({
 					</Badge>
 				</Group>
 			</Group>
-			{chart.renderBarChart({ data: chartData, height })}
+			<div style={{ flex: 1, minHeight: 0 }}>
+				{chart.renderBarChart({ data: chartData })}
+			</div>
 			{showLegend && (
-				<Stack gap="xs" mt="md">
+				<Stack gap="xs" mt="md" style={{ flexShrink: 0 }}>
 					{data.map((item) => (
 						<Group key={item.label} justify="space-between">
 							<Group gap="xs">
@@ -84,13 +80,6 @@ export function BarChart({
 						</Group>
 					))}
 				</Stack>
-			)}
-			{showTable && tableColumns && (
-				<Group gap="xs" mt="md" justify="flex-end">
-					<Badge variant="light" color="gray" size="sm">
-						Total: {formatValue(data.reduce((sum, d) => sum + d.value, 0))}
-					</Badge>
-				</Group>
 			)}
 		</Paper>
 	);

@@ -10,7 +10,6 @@ interface DonutChartProps {
 	showLegend?: boolean;
 	centerValue?: string;
 	formatValue?: (value: number) => string;
-	height?: number;
 }
 
 function transformData(data: CategoryDataPoint[]): ChartDataPoint[] {
@@ -28,15 +27,14 @@ export function DonutChart({
 	showLegend = true,
 	centerValue,
 	formatValue = (v) => v.toLocaleString(),
-	height = 300,
 }: DonutChartProps) {
 	const chart = useChartAdapter();
 
 	const chartData = useMemo(() => transformData(data), [data]);
 
 	return (
-		<Paper p="md" radius="sm">
-			<Group justify="space-between" mb="md">
+		<Paper p="md" radius="sm" h="100%" style={{ display: "flex", flexDirection: "column" }}>
+			<Group justify="space-between" mb="md" style={{ flexShrink: 0 }}>
 				<Text fw={600}>{title}</Text>
 				<Group gap="xs">
 					{centerValue && (
@@ -49,9 +47,11 @@ export function DonutChart({
 					</Badge>
 				</Group>
 			</Group>
-			{chart.renderDonutChart({ data: chartData, height, centerValue })}
+			<div style={{ flex: 1, minHeight: 0 }}>
+				{chart.renderDonutChart({ data: chartData, centerValue })}
+			</div>
 			{showLegend && (
-				<Stack gap="xs" mt="md">
+				<Stack gap="xs" mt="md" style={{ flexShrink: 0 }}>
 					{data.map((item) => (
 						<Group key={item.label} justify="space-between">
 							<Group gap="xs">

@@ -5,12 +5,15 @@ export type {
 	DashboardWidget,
 	GridLayoutItem,
 	WidgetType,
+	WidgetConstraints,
 } from "./dashboard-layout";
-export { WIDGET_DEFAULTS, WIDGET_LABELS } from "./dashboard-layout";
+export { WIDGET_CONSTRAINTS, WIDGET_LABELS } from "./dashboard-layout";
 export {
 	dashboardTemplates,
 	ALL_WIDGET_TYPES,
+	WIDGET_CATEGORIES,
 } from "./dashboard-templates";
+export type { WidgetTypeConfig } from "./dashboard-templates";
 export type {
 	MaterialMovement,
 	MovementListResponse,

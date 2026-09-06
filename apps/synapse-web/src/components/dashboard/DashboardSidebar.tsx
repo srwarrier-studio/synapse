@@ -27,9 +27,9 @@ import type { WidgetType } from "../../domain/entities/dashboard-layout";
 import {
 	ALL_WIDGET_TYPES,
 	dashboardTemplates,
-	WIDGET_CATEGORY_LABELS,
 } from "../../domain/entities/dashboard-templates";
 import type { WidgetCategory } from "../../domain/entities/widget";
+import { WIDGET_CATEGORY_LABELS } from "../../domain/entities/widget";
 
 const CATEGORY_ICONS: Record<WidgetCategory, typeof IconBriefcase> = {
 	finance: IconChartBar,

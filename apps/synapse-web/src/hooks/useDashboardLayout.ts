@@ -6,7 +6,7 @@ import type {
 	GridLayoutItem,
 	WidgetType,
 } from "../domain/entities/dashboard-layout";
-import { WIDGET_DEFAULTS } from "../domain/entities/dashboard-layout";
+import { WIDGET_CONSTRAINTS } from "../domain/entities/dashboard-layout";
 import { dashboardTemplates } from "../domain/entities/dashboard-templates";
 
 const STORAGE_KEY = "synapse-dashboard-layout";
@@ -15,24 +15,11 @@ function generateId(): string {
 	return `widget-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
-function applyMinSizes(widgets: DashboardWidget[], gridItems: GridLayoutItem[]): GridLayoutItem[] {
-	return gridItems.map((g) => {
-		const widget = widgets.find((w) => w.id === g.i);
-		const defaults = widget ? WIDGET_DEFAULTS[widget.type] : undefined;
-		return {
-			...g,
-			minW: defaults?.minW ?? 2,
-			minH: defaults?.minH ?? 2,
-		};
-	});
-}
-
 function loadLayout(): DashboardLayout | null {
 	try {
 		const raw = localStorage.getItem(STORAGE_KEY);
 		if (!raw) return null;
 		const parsed = JSON.parse(raw) as DashboardLayout;
-		parsed.GridLayout = applyMinSizes(parsed.widgets, parsed.GridLayout);
 		return parsed;
 	} catch {
 		return null;
@@ -52,10 +39,7 @@ export function useDashboardLayout() {
 			id: "default",
 			name: defaultTemplate.name,
 			widgets: defaultTemplate.widgets.map((w) => ({ ...w })),
-			GridLayout: applyMinSizes(
-				defaultTemplate.widgets,
-				defaultTemplate.GridLayout.map((g) => ({ ...g })),
-			),
+			GridLayout: defaultTemplate.GridLayout.map((g) => ({ ...g })),
 			createdAt: new Date().toISOString(),
 			updatedAt: new Date().toISOString(),
 		};
@@ -68,20 +52,20 @@ export function useDashboardLayout() {
 	const onLayoutChange = useCallback((newGridLayout: Layout) => {
 		setLayout((prev) => ({
 			...prev,
-			GridLayout: applyMinSizes(prev.widgets, [...newGridLayout] as GridLayoutItem[]),
+			GridLayout: [...newGridLayout] as GridLayoutItem[],
 			updatedAt: new Date().toISOString(),
 		}));
 	}, []);
 
 	const addWidget = useCallback((type: WidgetType) => {
 		const id = generateId();
+		const constraints = WIDGET_CONSTRAINTS[type];
 		const newWidget: DashboardWidget = {
 			id,
 			type,
 			title: "",
 		};
 		setLayout((prev) => {
-			const defaults = WIDGET_DEFAULTS[type];
 			const maxY = prev.GridLayout.reduce(
 				(max, item) => Math.max(max, item.y + item.h),
 				0,
@@ -90,10 +74,12 @@ export function useDashboardLayout() {
 				i: id,
 				x: 0,
 				y: maxY,
-				w: defaults.w,
-				h: defaults.h,
-				minW: defaults.minW,
-				minH: defaults.minH,
+				w: constraints.defaultW,
+				h: constraints.defaultH,
+				minW: constraints.minW,
+				minH: constraints.minH,
+				maxW: constraints.maxW,
+				maxH: constraints.maxH,
 			};
 			return {
 				...prev,
@@ -120,10 +106,7 @@ export function useDashboardLayout() {
 			id: templateId,
 			name: template.name,
 			widgets: template.widgets.map((w) => ({ ...w })),
-			GridLayout: applyMinSizes(
-				template.widgets,
-				template.GridLayout.map((g) => ({ ...g })),
-			),
+			GridLayout: template.GridLayout.map((g) => ({ ...g })),
 			createdAt: new Date().toISOString(),
 			updatedAt: new Date().toISOString(),
 		});
@@ -135,10 +118,7 @@ export function useDashboardLayout() {
 			id: "default",
 			name: defaultTemplate.name,
 			widgets: defaultTemplate.widgets.map((w) => ({ ...w })),
-			GridLayout: applyMinSizes(
-				defaultTemplate.widgets,
-				defaultTemplate.GridLayout.map((g) => ({ ...g })),
-			),
+			GridLayout: defaultTemplate.GridLayout.map((g) => ({ ...g })),
 			createdAt: new Date().toISOString(),
 			updatedAt: new Date().toISOString(),
 		});

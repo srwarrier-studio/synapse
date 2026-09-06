@@ -9,7 +9,6 @@ interface TrendChartProps {
 	title?: string;
 	valueLabel?: string;
 	seriesLabel?: string;
-	height?: number;
 }
 
 function transformData(data: TimeSeriesDataPoint[], seriesLabel: string): MultiSeriesData[] {
@@ -37,7 +36,6 @@ export function TrendChart({
 	title = "Trend",
 	valueLabel,
 	seriesLabel = "Value",
-	height = 300,
 }: TrendChartProps) {
 	const chart = useChartAdapter();
 
@@ -47,8 +45,8 @@ export function TrendChart({
 	);
 
 	return (
-		<Paper p="md" radius="sm">
-			<Group justify="space-between" mb="md">
+		<Paper p="md" radius="sm" h="100%" style={{ display: "flex", flexDirection: "column" }}>
+			<Group justify="space-between" mb="md" style={{ flexShrink: 0 }}>
 				<Text fw={600}>{title}</Text>
 				<Group gap="xs">
 					{valueLabel && (
@@ -61,7 +59,9 @@ export function TrendChart({
 					</Badge>
 				</Group>
 			</Group>
-			{chart.renderLineChart({ data: chartData, height })}
+			<div style={{ flex: 1, minHeight: 0 }}>
+				{chart.renderLineChart({ data: chartData })}
+			</div>
 		</Paper>
 	);
 }

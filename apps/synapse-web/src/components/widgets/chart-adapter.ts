@@ -19,29 +19,24 @@ export interface MultiSeriesData {
 
 export interface LineChartProps {
 	data: MultiSeriesData[];
-	height: number;
 }
 
 export interface BarChartProps {
 	data: ChartDataPoint[];
-	height: number;
 	stacked?: boolean;
 }
 
 export interface PieChartProps {
 	data: ChartDataPoint[];
-	height: number;
 }
 
 export interface DonutChartProps {
 	data: ChartDataPoint[];
-	height: number;
 	centerValue?: string;
 }
 
 export interface AreaChartProps {
 	data: MultiSeriesData[];
-	height: number;
 	stacked?: boolean;
 }
 

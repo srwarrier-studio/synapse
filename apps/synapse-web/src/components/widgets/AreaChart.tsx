@@ -10,7 +10,6 @@ interface AreaChartProps {
 	valueLabel?: string;
 	seriesLabel?: string;
 	stacked?: boolean;
-	height?: number;
 }
 
 function transformData(data: TimeSeriesDataPoint[], seriesLabel: string): MultiSeriesData[] {
@@ -39,7 +38,6 @@ export function AreaChart({
 	valueLabel,
 	seriesLabel = "Value",
 	stacked = false,
-	height = 300,
 }: AreaChartProps) {
 	const chart = useChartAdapter();
 
@@ -49,8 +47,8 @@ export function AreaChart({
 	);
 
 	return (
-		<Paper p="md" radius="sm">
-			<Group justify="space-between" mb="md">
+		<Paper p="md" radius="sm" h="100%" style={{ display: "flex", flexDirection: "column" }}>
+			<Group justify="space-between" mb="md" style={{ flexShrink: 0 }}>
 				<Text fw={600}>{title}</Text>
 				<Group gap="xs">
 					{valueLabel && (
@@ -63,7 +61,9 @@ export function AreaChart({
 					</Badge>
 				</Group>
 			</Group>
-			{chart.renderAreaChart({ data: chartData, height, stacked })}
+			<div style={{ flex: 1, minHeight: 0 }}>
+				{chart.renderAreaChart({ data: chartData, stacked })}
+			</div>
 		</Paper>
 	);
 }

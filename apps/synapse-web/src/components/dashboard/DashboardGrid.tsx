@@ -6,7 +6,7 @@ import type {
 	DashboardWidget,
 	GridLayoutItem,
 } from "../../domain/entities/dashboard-layout";
-import { WIDGET_LABELS } from "../../domain/entities/dashboard-layout";
+import { WIDGET_LABELS, WIDGET_CONSTRAINTS } from "../../domain/entities/dashboard-layout";
 import type {
 	SalesTrendPoint,
 	TopProduct,
@@ -139,22 +139,6 @@ function transformRecentOrders(data: RecentOrder[]): TableData {
 		})),
 	};
 }
-
-const STATUS_COLORS: Record<string, string> = {
-	DELIVERED: "sami-green",
-	SHIPPED: "synapse-blue",
-	PROCESSING: "orange",
-	PENDING_APPROVAL: "yellow",
-	CANCELLED: "red",
-};
-
-const STATUS_LABELS: Record<string, string> = {
-	DELIVERED: "Delivered",
-	SHIPPED: "Shipped",
-	PROCESSING: "Processing",
-	PENDING_APPROVAL: "Pending",
-	CANCELLED: "Cancelled",
-};
 
 function renderWidget(
 	widget: DashboardWidget,
@@ -313,7 +297,17 @@ export function DashboardGrid({
 }: DashboardGridProps) {
 	const { width, containerRef, mounted } = useContainerWidth();
 
-	const layout = gridLayout.map((item) => ({ ...item }));
+	const layout = gridLayout.map((item) => {
+		const widget = widgets.find((w) => w.id === item.i);
+		const constraints = widget ? WIDGET_CONSTRAINTS[widget.type] : undefined;
+		return {
+			...item,
+			minW: constraints?.minW,
+			minH: constraints?.minH,
+			maxW: constraints?.maxW,
+			maxH: constraints?.maxH,
+		};
+	});
 
 	return (
 		<div

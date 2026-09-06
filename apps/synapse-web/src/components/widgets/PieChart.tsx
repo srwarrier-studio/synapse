@@ -9,7 +9,6 @@ interface PieChartProps {
 	title?: string;
 	showLegend?: boolean;
 	formatValue?: (value: number) => string;
-	height?: number;
 }
 
 function transformData(data: CategoryDataPoint[]): ChartDataPoint[] {
@@ -26,15 +25,14 @@ export function PieChart({
 	title = "Pie Chart",
 	showLegend = true,
 	formatValue = (v) => v.toLocaleString(),
-	height = 300,
 }: PieChartProps) {
 	const chart = useChartAdapter();
 
 	const chartData = useMemo(() => transformData(data), [data]);
 
 	return (
-		<Paper p="md" radius="sm">
-			<Group justify="space-between" mb="md">
+		<Paper p="md" radius="sm" h="100%" style={{ display: "flex", flexDirection: "column" }}>
+			<Group justify="space-between" mb="md" style={{ flexShrink: 0 }}>
 				<Text fw={600}>{title}</Text>
 				<Group gap="xs">
 					<Badge variant="light" color="gray" size="sm">
@@ -42,9 +40,11 @@ export function PieChart({
 					</Badge>
 				</Group>
 			</Group>
-			{chart.renderPieChart({ data: chartData, height })}
+			<div style={{ flex: 1, minHeight: 0 }}>
+				{chart.renderPieChart({ data: chartData })}
+			</div>
 			{showLegend && (
-				<Stack gap="xs" mt="md">
+				<Stack gap="xs" mt="md" style={{ flexShrink: 0 }}>
 					{data.map((item) => (
 						<Group key={item.label} justify="space-between">
 							<Group gap="xs">

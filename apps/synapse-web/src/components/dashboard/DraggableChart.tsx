@@ -25,7 +25,7 @@ export function DraggableChart({
 			style={{
 				display: "flex",
 				flexDirection: "column",
-				overflow: "auto",
+				overflow: "hidden",
 				border: isEditing ? "1px solid var(--mantine-color-default-border)" : "none",
 				transition: "border 150ms ease, box-shadow 150ms ease",
 			}}
@@ -66,9 +66,9 @@ export function DraggableChart({
 					)}
 				</Group>
 			)}
-		<div style={{ flex: 1, overflow: "auto", padding: "var(--mantine-spacing-xs)" }}>
-			{children}
-		</div>
+			<div style={{ flex: 1, overflow: "auto", padding: "var(--mantine-spacing-xs)" }}>
+				{children}
+			</div>
 		</Paper>
 	);
 }
