@@ -122,6 +122,7 @@ code {
 .react-grid-item {
 	border: none !important;
 	outline: none !important;
+	overflow: auto !important;
 }
 
 .react-grid-item > .react-resizable-handle {
