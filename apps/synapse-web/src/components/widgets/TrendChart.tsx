@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { Paper, Text, Group, Badge } from "@mantine/core";
 import type { TimeSeriesDataPoint } from "../../domain/entities/widget";
 import type { MultiSeriesData } from "./chart-adapter";
@@ -38,11 +37,7 @@ export function TrendChart({
 	seriesLabel = "Value",
 }: TrendChartProps) {
 	const chart = useChartAdapter();
-
-	const chartData = useMemo(
-		() => transformData(data, seriesLabel),
-		[data, seriesLabel],
-	);
+	const chartData = transformData(data, seriesLabel);
 
 	return (
 		<Paper p="md" radius="sm" h="100%" style={{ display: "flex", flexDirection: "column" }}>

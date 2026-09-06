@@ -9,12 +9,14 @@ interface SparklineWidgetProps {
 	height?: number;
 }
 
+const defaultFormatValue = (v: number) => v.toLocaleString();
+
 export function SparklineWidget({
 	data,
 	title = "Sparkline",
 	value,
 	change,
-	formatValue = (v) => v.toLocaleString(),
+	formatValue = defaultFormatValue,
 	height = 60,
 }: SparklineWidgetProps) {
 	const max = Math.max(...data);

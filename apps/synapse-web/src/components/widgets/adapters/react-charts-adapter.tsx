@@ -1,6 +1,3 @@
-import { useMemo } from "react";
-import { Chart } from "react-charts";
-import type { AxisOptions } from "react-charts";
 import type {
 	ChartAdapter,
 	LineChartProps,
@@ -9,57 +6,13 @@ import type {
 	DonutChartProps,
 	AreaChartProps,
 } from "../chart-adapter";
-
-type LineDatum = {
-	date: string;
-	value: number;
-};
-
-type CategoryDatum = {
-	label: string;
-	value: number;
-};
-
-function useLineAxes() {
-	const primaryAxis = useMemo(
-		(): AxisOptions<LineDatum> => ({
-			getValue: (datum) => datum.date,
-		}),
-		[],
-	);
-
-	const secondaryAxes = useMemo(
-		(): AxisOptions<LineDatum>[] => [
-			{
-				getValue: (datum) => datum.value,
-			},
-		],
-		[],
-	);
-
-	return { primaryAxis, secondaryAxes };
-}
-
-function useCategoryAxes(elementType?: "bar") {
-	const primaryAxis = useMemo(
-		(): AxisOptions<CategoryDatum> => ({
-			getValue: (datum) => datum.label,
-		}),
-		[],
-	);
-
-	const secondaryAxes = useMemo(
-		(): AxisOptions<CategoryDatum>[] => [
-			{
-				getValue: (datum) => datum.value,
-				elementType,
-			},
-		],
-		[elementType],
-	);
-
-	return { primaryAxis, secondaryAxes };
-}
+import {
+	LineChartInner,
+	BarChartInner,
+	PieChartInner,
+	DonutChartInner,
+	AreaChartInner,
+} from "./chart-components";
 
 function renderLineChart({ data }: LineChartProps) {
 	const chartData = data.map((series) => ({
@@ -71,26 +24,6 @@ function renderLineChart({ data }: LineChartProps) {
 	}));
 
 	return <LineChartInner data={chartData} />;
-}
-
-function LineChartInner({
-	data,
-}: {
-	data: Array<{ label: string; data: LineDatum[] }>;
-}) {
-	const { primaryAxis, secondaryAxes } = useLineAxes();
-
-	return (
-		<div style={{ width: "100%", height: "100%" }}>
-			<Chart
-				options={{
-					data,
-					primaryAxis,
-					secondaryAxes,
-				}}
-			/>
-		</div>
-	);
 }
 
 function renderBarChart({ data }: BarChartProps) {
@@ -107,26 +40,6 @@ function renderBarChart({ data }: BarChartProps) {
 	return <BarChartInner data={chartData} />;
 }
 
-function BarChartInner({
-	data,
-}: {
-	data: Array<{ label: string; data: CategoryDatum[] }>;
-}) {
-	const { primaryAxis, secondaryAxes } = useCategoryAxes("bar");
-
-	return (
-		<div style={{ width: "100%", height: "100%" }}>
-			<Chart
-				options={{
-					data,
-					primaryAxis,
-					secondaryAxes,
-				}}
-			/>
-		</div>
-	);
-}
-
 function renderPieChart({ data }: PieChartProps) {
 	const chartData = [
 		{
@@ -139,26 +52,6 @@ function renderPieChart({ data }: PieChartProps) {
 	];
 
 	return <PieChartInner data={chartData} />;
-}
-
-function PieChartInner({
-	data,
-}: {
-	data: Array<{ label: string; data: CategoryDatum[] }>;
-}) {
-	const { primaryAxis, secondaryAxes } = useCategoryAxes();
-
-	return (
-		<div style={{ width: "100%", height: "100%" }}>
-			<Chart
-				options={{
-					data,
-					primaryAxis,
-					secondaryAxes,
-				}}
-			/>
-		</div>
-	);
 }
 
 function renderDonutChart({ data }: DonutChartProps) {
@@ -175,26 +68,6 @@ function renderDonutChart({ data }: DonutChartProps) {
 	return <DonutChartInner data={chartData} />;
 }
 
-function DonutChartInner({
-	data,
-}: {
-	data: Array<{ label: string; data: CategoryDatum[] }>;
-}) {
-	const { primaryAxis, secondaryAxes } = useCategoryAxes();
-
-	return (
-		<div style={{ width: "100%", height: "100%", position: "relative" }}>
-			<Chart
-				options={{
-					data,
-					primaryAxis,
-					secondaryAxes,
-				}}
-			/>
-		</div>
-	);
-}
-
 function renderAreaChart({ data }: AreaChartProps) {
 	const chartData = data.map((series) => ({
 		label: series.label,
@@ -205,26 +78,6 @@ function renderAreaChart({ data }: AreaChartProps) {
 	}));
 
 	return <AreaChartInner data={chartData} />;
-}
-
-function AreaChartInner({
-	data,
-}: {
-	data: Array<{ label: string; data: LineDatum[] }>;
-}) {
-	const { primaryAxis, secondaryAxes } = useLineAxes();
-
-	return (
-		<div style={{ width: "100%", height: "100%" }}>
-			<Chart
-				options={{
-					data,
-					primaryAxis,
-					secondaryAxes,
-				}}
-			/>
-		</div>
-	);
 }
 
 export const reactChartsAdapter: ChartAdapter = {

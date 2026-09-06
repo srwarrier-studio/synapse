@@ -19,7 +19,7 @@ const STATUS_COLORS: Record<string, string> = {
 	Inactive: "red",
 };
 
-function formatCellValue(key: string, value: unknown, type?: string): string {
+function formatCellValue(_key: string, value: unknown, type?: string): string {
 	if (value === null || value === undefined) return "-";
 
 	switch (type) {
@@ -34,7 +34,7 @@ function formatCellValue(key: string, value: unknown, type?: string): string {
 	}
 }
 
-function getCellColor(key: string, value: unknown): string | undefined {
+function getCellColor(_key: string, value: unknown): string | undefined {
 	const strValue = String(value);
 	return STATUS_COLORS[strValue];
 }

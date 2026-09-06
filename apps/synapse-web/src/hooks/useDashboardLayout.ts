@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { Layout } from "react-grid-layout";
 import type {
 	DashboardLayout,
@@ -6,10 +6,11 @@ import type {
 	GridLayoutItem,
 	WidgetType,
 } from "../domain/entities/dashboard-layout";
-import { WIDGET_CONSTRAINTS } from "../domain/entities/dashboard-layout";
+import { WIDGET_CONSTRAINTS } from "../domain/constants/dashboard-layout";
 import { dashboardTemplates } from "../domain/entities/dashboard-templates";
 
-const STORAGE_KEY = "synapse-dashboard-layout";
+const STORAGE_KEY = "synapse-dashboard-layout:v1";
+const STORAGE_KEY_LEGACY = "synapse-dashboard-layout";
 
 function generateId(): string {
 	return `widget-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -18,9 +19,17 @@ function generateId(): string {
 function loadLayout(): DashboardLayout | null {
 	try {
 		const raw = localStorage.getItem(STORAGE_KEY);
-		if (!raw) return null;
-		const parsed = JSON.parse(raw) as DashboardLayout;
-		return parsed;
+		if (raw) return JSON.parse(raw) as DashboardLayout;
+
+		const legacy = localStorage.getItem(STORAGE_KEY_LEGACY);
+		if (legacy) {
+			const parsed = JSON.parse(legacy) as DashboardLayout;
+			localStorage.setItem(STORAGE_KEY, legacy);
+			localStorage.removeItem(STORAGE_KEY_LEGACY);
+			return parsed;
+		}
+
+		return null;
 	} catch {
 		return null;
 	}
@@ -49,15 +58,15 @@ export function useDashboardLayout() {
 		saveLayout(layout);
 	}, [layout]);
 
-	const onLayoutChange = useCallback((newGridLayout: Layout) => {
+	const onLayoutChange = (newGridLayout: Layout) => {
 		setLayout((prev) => ({
 			...prev,
 			GridLayout: [...newGridLayout] as GridLayoutItem[],
 			updatedAt: new Date().toISOString(),
 		}));
-	}, []);
+	};
 
-	const addWidget = useCallback((type: WidgetType) => {
+	const addWidget = (type: WidgetType) => {
 		const id = generateId();
 		const constraints = WIDGET_CONSTRAINTS[type];
 		const newWidget: DashboardWidget = {
@@ -88,18 +97,18 @@ export function useDashboardLayout() {
 				updatedAt: new Date().toISOString(),
 			};
 		});
-	}, []);
+	};
 
-	const removeWidget = useCallback((widgetId: string) => {
+	const removeWidget = (widgetId: string) => {
 		setLayout((prev) => ({
 			...prev,
 			widgets: prev.widgets.filter((w) => w.id !== widgetId),
 			GridLayout: prev.GridLayout.filter((item) => item.i !== widgetId),
 			updatedAt: new Date().toISOString(),
 		}));
-	}, []);
+	};
 
-	const applyTemplate = useCallback((templateId: string) => {
+	const applyTemplate = (templateId: string) => {
 		const template = dashboardTemplates.find((t) => t.id === templateId);
 		if (!template) return;
 		setLayout({
@@ -110,9 +119,9 @@ export function useDashboardLayout() {
 			createdAt: new Date().toISOString(),
 			updatedAt: new Date().toISOString(),
 		});
-	}, []);
+	};
 
-	const resetLayout = useCallback(() => {
+	const resetLayout = () => {
 		const defaultTemplate = dashboardTemplates[0];
 		setLayout({
 			id: "default",
@@ -122,7 +131,7 @@ export function useDashboardLayout() {
 			createdAt: new Date().toISOString(),
 			updatedAt: new Date().toISOString(),
 		});
-	}, []);
+	};
 
 	return {
 		layout,

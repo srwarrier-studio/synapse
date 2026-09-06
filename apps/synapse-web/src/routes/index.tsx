@@ -1,3 +1,4 @@
+/* eslint-disable react/only-export-components */
 import { createFileRoute } from "@tanstack/react-router";
 import { AuthenticationTitle } from "../pages/login";
 

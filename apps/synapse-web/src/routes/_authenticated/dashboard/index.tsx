@@ -1,3 +1,4 @@
+/* eslint-disable react/only-export-components */
 import { createFileRoute } from "@tanstack/react-router";
 import { Alert, Group, Stack, Title, Button, Drawer } from "@mantine/core";
 import { useState } from "react";
@@ -7,7 +8,8 @@ import {
 	IconEdit,
 	IconCheck,
 } from "@tabler/icons-react";
-import { DashboardGrid, DashboardSidebar } from "../../../components/dashboard";
+import { DashboardGrid } from "../../../components/dashboard/DashboardGrid";
+import { DashboardSidebar } from "../../../components/dashboard/DashboardSidebar";
 import { useDashboard } from "../../../hooks/useDashboard";
 import { useDashboardLayout } from "../../../hooks/useDashboardLayout";
 

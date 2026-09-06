@@ -5,15 +5,39 @@ export type {
 	DashboardWidget,
 	GridLayoutItem,
 	WidgetType,
-	WidgetConstraints,
 } from "./dashboard-layout";
-export { WIDGET_CONSTRAINTS, WIDGET_LABELS } from "./dashboard-layout";
+export type {
+	DashboardSummary,
+	SalesTrendPoint,
+	TopProduct,
+	RegionalPerformance,
+	OrderStatus as OrderStatusData,
+	MonthlyRevenue,
+	CategoryBreakdown,
+	RecentOrder,
+} from "./dashboard";
 export {
 	dashboardTemplates,
 	ALL_WIDGET_TYPES,
 	WIDGET_CATEGORIES,
 } from "./dashboard-templates";
 export type { WidgetTypeConfig } from "./dashboard-templates";
+export type {
+	ChartType,
+	WidgetCategory,
+	KPIData,
+	TimeSeriesDataPoint,
+	CategoryDataPoint,
+	TableData,
+	GaugeData,
+	FunnelData,
+	HeatmapData,
+	RadarData,
+	TreemapData,
+	WaterfallData,
+	ScatterData,
+	WidgetDataMap,
+} from "./widget";
 export type {
 	MaterialMovement,
 	MovementListResponse,

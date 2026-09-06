@@ -10,12 +10,14 @@ interface KPIWidgetProps {
 	formatValue?: (value: number | string) => string;
 }
 
+const defaultFormatValue = (v: number | string) => String(v);
+
 export function KPIWidget({
 	title,
 	data,
 	icon,
 	color,
-	formatValue = (v) => String(v),
+	formatValue = defaultFormatValue,
 }: KPIWidgetProps) {
 	const { value, change, changeLabel, secondaryValue } = data;
 	const isPositive = change !== undefined && change > 0;

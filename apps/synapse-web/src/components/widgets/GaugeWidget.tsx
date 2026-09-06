@@ -8,10 +8,12 @@ interface GaugeWidgetProps {
 	height?: number;
 }
 
+const defaultFormatValue = (v: number) => v.toLocaleString();
+
 export function GaugeWidget({
 	data,
 	title = "Gauge",
-	formatValue = (v) => v.toLocaleString(),
+	formatValue = defaultFormatValue,
 	height = 120,
 }: GaugeWidgetProps) {
 	const { value, min, max, target, thresholds } = data;

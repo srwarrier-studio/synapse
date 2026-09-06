@@ -2,10 +2,10 @@
 	"name": "@org/source",
 	"version": "0.0.0",
 	"license": "MIT",
-  "scripts": {
-    "format": "biome check --write --unsafe .",
-    "lint": "biome check ."
-  },
+	"scripts": {
+		"format": "biome check --write --unsafe .",
+		"lint": "biome check ."
+	},
 	"private": true,
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.11",
@@ -30,6 +30,7 @@
 		"jsdom": "^27.1.0",
 		"nx": "23.1.1",
 		"prettier": "^3.8.1",
+		"react-doctor": "^0.9.13",
 		"tslib": "^2.3.0",
 		"typescript": "~6.0.3",
 		"vite": "^8.0.0",

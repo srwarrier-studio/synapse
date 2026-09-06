@@ -1,7 +1,7 @@
 import type { DashboardTemplate, WidgetType } from "./dashboard-layout";
-import { WIDGET_CONSTRAINTS } from "./dashboard-layout";
 import type { WidgetCategory } from "./widget";
-import { WIDGET_CATEGORY_LABELS } from "./widget";
+import { WIDGET_CONSTRAINTS } from "../constants/dashboard-layout";
+import { WIDGET_CATEGORY_LABELS } from "../constants/widget";
 
 export interface WidgetTypeConfig {
 	id: WidgetType;

@@ -1,0 +1,58 @@
+import type { ChartType, WidgetCategory } from "../entities/widget";
+
+export const CHART_TYPE_LABELS: Record<ChartType, string> = {
+	kpi: "KPI Card",
+	line: "Line Chart",
+	bar: "Bar Chart",
+	pie: "Pie Chart",
+	donut: "Donut Chart",
+	area: "Area Chart",
+	"stacked-bar": "Stacked Bar",
+	"grouped-bar": "Grouped Bar",
+	scatter: "Scatter Plot",
+	bubble: "Bubble Chart",
+	heatmap: "Heatmap",
+	gauge: "Gauge",
+	progress: "Progress Bar",
+	table: "Data Table",
+	sparkline: "Sparkline",
+	funnel: "Funnel Chart",
+	radar: "Radar Chart",
+	treemap: "Treemap",
+	waterfall: "Waterfall Chart",
+	bullet: "Bullet Chart",
+};
+
+export const WIDGET_CATEGORY_LABELS: Record<WidgetCategory, string> = {
+	finance: "Finance",
+	operations: "Operations",
+	research: "Research & Development",
+	manufacturing: "Manufacturing",
+	quality: "Quality Control",
+	sales: "Sales & Marketing",
+	"supply-chain": "Supply Chain",
+	hr: "Human Resources",
+};
+
+export const CHART_TYPE_DEFAULTS: Record<ChartType, { w: number; h: number; minW: number; minH: number }> = {
+	kpi: { w: 3, h: 2, minW: 2, minH: 2 },
+	line: { w: 6, h: 4, minW: 4, minH: 3 },
+	bar: { w: 6, h: 4, minW: 4, minH: 3 },
+	pie: { w: 4, h: 4, minW: 3, minH: 3 },
+	donut: { w: 4, h: 4, minW: 3, minH: 3 },
+	area: { w: 6, h: 4, minW: 4, minH: 3 },
+	"stacked-bar": { w: 6, h: 4, minW: 4, minH: 3 },
+	"grouped-bar": { w: 6, h: 4, minW: 4, minH: 3 },
+	scatter: { w: 6, h: 4, minW: 4, minH: 3 },
+	bubble: { w: 6, h: 4, minW: 4, minH: 3 },
+	heatmap: { w: 6, h: 4, minW: 4, minH: 3 },
+	gauge: { w: 4, h: 3, minW: 3, minH: 3 },
+	progress: { w: 4, h: 2, minW: 3, minH: 2 },
+	table: { w: 12, h: 6, minW: 6, minH: 4 },
+	sparkline: { w: 4, h: 2, minW: 3, minH: 2 },
+	funnel: { w: 6, h: 4, minW: 4, minH: 3 },
+	radar: { w: 6, h: 4, minW: 4, minH: 3 },
+	treemap: { w: 6, h: 4, minW: 4, minH: 3 },
+	waterfall: { w: 6, h: 4, minW: 4, minH: 3 },
+	bullet: { w: 6, h: 3, minW: 4, minH: 2 },
+};

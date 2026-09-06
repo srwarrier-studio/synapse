@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { Paper, Text, Group, Badge, Stack } from "@mantine/core";
 import type { CategoryDataPoint } from "../../domain/entities/widget";
 import type { ChartDataPoint } from "./chart-adapter";
@@ -11,6 +10,8 @@ interface BarChartProps {
 	showLegend?: boolean;
 	formatValue?: (value: number) => string;
 }
+
+const defaultFormatValue = (v: number) => v.toLocaleString();
 
 function transformData(data: CategoryDataPoint[]): ChartDataPoint[] {
 	return data.map((d) => ({
@@ -26,11 +27,10 @@ export function BarChart({
 	title = "Bar Chart",
 	valueLabel,
 	showLegend = false,
-	formatValue = (v) => v.toLocaleString(),
+	formatValue = defaultFormatValue,
 }: BarChartProps) {
 	const chart = useChartAdapter();
-
-	const chartData = useMemo(() => transformData(data), [data]);
+	const chartData = transformData(data);
 
 	return (
 		<Paper p="md" radius="sm" h="100%" style={{ display: "flex", flexDirection: "column" }}>

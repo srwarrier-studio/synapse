@@ -29,7 +29,7 @@ import {
 	dashboardTemplates,
 } from "../../domain/entities/dashboard-templates";
 import type { WidgetCategory } from "../../domain/entities/widget";
-import { WIDGET_CATEGORY_LABELS } from "../../domain/entities/widget";
+import { WIDGET_CATEGORY_LABELS } from "../../domain/constants/widget";
 
 const CATEGORY_ICONS: Record<WidgetCategory, typeof IconBriefcase> = {
 	finance: IconChartBar,
@@ -154,7 +154,7 @@ export function DashboardSidebar({
 									{widgets.map((widget) => (
 										<UnstyledButton
 											key={widget.id}
-											onClick={() => onAddWidget(widget.type as WidgetType)}
+											onClick={() => onAddWidget(widget.id as WidgetType)}
 											p="xs"
 											style={(theme) => ({
 												border: `1px solid ${theme.colors.defaultColor}`,

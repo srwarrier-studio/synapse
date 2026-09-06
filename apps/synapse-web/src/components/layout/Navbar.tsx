@@ -49,7 +49,6 @@ export function Navbar() {
 								: location.pathname.startsWith(item.to)
 						}
 						variant="subtle"
-						radius="sm"
 					/>
 				);
 			})}

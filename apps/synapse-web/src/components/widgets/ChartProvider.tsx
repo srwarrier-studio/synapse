@@ -17,6 +17,7 @@ export function ChartProvider({ adapter = reactChartsAdapter, children }: ChartP
 	);
 }
 
+// eslint-disable-next-line react/only-export-components
 export function useChartAdapter(): ChartAdapter {
 	return useContext(ChartAdapterContext);
 }
