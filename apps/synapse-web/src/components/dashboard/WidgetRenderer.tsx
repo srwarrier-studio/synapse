@@ -11,6 +11,7 @@ import type {
 	DashboardSummary,
 } from "../../domain/entities/dashboard";
 import type { KPIData } from "../../domain/entities/widget";
+import type { DataPointClickEvent } from "../widgets/chart-adapter";
 import {
 	transformSalesTrend,
 	transformTopProducts,
@@ -41,6 +42,7 @@ interface WidgetRendererProps {
 	monthlyRevenue: MonthlyRevenue[];
 	categoryBreakdown: CategoryBreakdown[];
 	recentOrders: RecentOrder[];
+	onDrillDown?: (month: string, year: number) => void;
 }
 
 function KpiRevenue({ summary }: { summary?: DashboardSummary | null }) {
@@ -111,6 +113,7 @@ function SalesTrendWidget({ salesTrend }: { salesTrend: SalesTrendPoint[] }) {
 			title="Sales Trend by Region"
 			valueLabel={`₹${(salesTrend.reduce((sum, d) => sum + d.amount, 0) / 1000000).toFixed(1)}M total`}
 			seriesLabel="Region"
+			showLegend
 		/>
 	);
 }
@@ -126,13 +129,26 @@ function TopProductsWidget({ topProducts }: { topProducts: TopProduct[] }) {
 	);
 }
 
-function MonthlyRevenueWidget({ monthlyRevenue }: { monthlyRevenue: MonthlyRevenue[] }) {
+function MonthlyRevenueWidget({
+	monthlyRevenue,
+	onDrillDown,
+}: {
+	monthlyRevenue: MonthlyRevenue[];
+	onDrillDown?: (month: string, year: number) => void;
+}) {
+	function handleClick(point: DataPointClickEvent) {
+		if (onDrillDown) {
+			onDrillDown(point.label, 2024);
+		}
+	}
+
 	return (
 		<BarChart
 			data={transformMonthlyRevenue(monthlyRevenue)}
 			title="Monthly Revenue"
-			valueLabel={`₹${(monthlyRevenue.reduce((sum, d) => sum + d.revenue, 0) / 1000000).toFixed(1)}M total`}
+			valueLabel={`₹${(monthlyRevenue.reduce((sum, d) => sum + d.revenue, 0) / 1000000).toFixed(1)}M total — Click a month for insights`}
 			formatValue={(v) => `₹${v.toLocaleString()}`}
+			onDataPointClick={onDrillDown ? handleClick : undefined}
 		/>
 	);
 }
@@ -190,6 +206,7 @@ export function WidgetRenderer({
 	monthlyRevenue,
 	categoryBreakdown,
 	recentOrders,
+	onDrillDown,
 }: WidgetRendererProps) {
 	switch (widget.type) {
 		case "kpi-revenue":
@@ -205,7 +222,12 @@ export function WidgetRenderer({
 		case "top-products":
 			return <TopProductsWidget topProducts={topProducts} />;
 		case "monthly-revenue":
-			return <MonthlyRevenueWidget monthlyRevenue={monthlyRevenue} />;
+			return (
+				<MonthlyRevenueWidget
+					monthlyRevenue={monthlyRevenue}
+					onDrillDown={onDrillDown}
+				/>
+			);
 		case "order-status":
 			return <OrderStatusWidget orderStatus={orderStatus} />;
 		case "category-breakdown":

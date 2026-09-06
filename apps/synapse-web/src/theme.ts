@@ -811,5 +811,62 @@ export const theme = createTheme({
 				},
 			}),
 		},
+		Paper: {
+			defaultProps: {
+				radius: "md",
+				withBorder: false,
+			},
+			styles: () => ({
+				root: {
+					boxShadow: "0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)",
+					transition: "box-shadow 0.2s ease, transform 0.2s ease",
+					"&:hover": {
+						boxShadow: "0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04)",
+					},
+				},
+			}),
+		},
+		NavLink: {
+			defaultProps: {
+				variant: "subtle",
+				radius: "md",
+			},
+			styles: () => ({
+				root: {
+					borderRadius: "8px",
+					padding: "8px 12px",
+					marginBottom: "2px",
+					transition: "all 0.15s ease",
+					"&:hover": {
+						backgroundColor: "rgba(0, 120, 212, 0.06)",
+					},
+				},
+				label: {
+					fontSize: "14px",
+					fontWeight: 500,
+				},
+				leftSection: {
+					color: "#6b6b6b",
+				},
+				active: {
+					backgroundColor: "rgba(0, 120, 212, 0.08)",
+					color: "#0078d4",
+					"& .mantine-NavLink-leftSection": {
+						color: "#0078d4",
+					},
+				},
+			}),
+		},
+		Avatar: {
+			defaultProps: {
+				radius: "xl",
+			},
+		},
+		Menu: {
+			defaultProps: {
+				shadow: "md",
+				radius: "md",
+			},
+		},
 	},
 });

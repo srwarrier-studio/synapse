@@ -1,4 +1,11 @@
+export type { User, UserRole, AuthState } from "./auth";
 export type { Currency, Money, OrderStatus, Region } from "./common";
+export type {
+	InsightCategory,
+	InsightFactor,
+	InsightImpact,
+	MonthlyContributors,
+} from "./insight";
 export type {
 	DashboardLayout,
 	DashboardTemplate,

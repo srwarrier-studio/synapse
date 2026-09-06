@@ -1,6 +1,15 @@
-/* eslint-disable react/only-export-components */
 import { createFileRoute } from "@tanstack/react-router";
-import { Alert, Group, Stack, Title, Button, Drawer } from "@mantine/core";
+import {
+	Alert,
+	Group,
+	Stack,
+	Title,
+	Button,
+	Drawer,
+	SimpleGrid,
+	Paper,
+	Skeleton,
+} from "@mantine/core";
 import { useState } from "react";
 import {
 	IconAlertTriangle,
@@ -10,12 +19,38 @@ import {
 } from "@tabler/icons-react";
 import { DashboardGrid } from "../../../components/dashboard/DashboardGrid";
 import { DashboardSidebar } from "../../../components/dashboard/DashboardSidebar";
+import { InsightPanel } from "../../../components/insights/InsightPanel";
 import { useDashboard } from "../../../hooks/useDashboard";
 import { useDashboardLayout } from "../../../hooks/useDashboardLayout";
+import { useInsights } from "../../../hooks/useInsights";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
 	component: DashboardIndex,
 });
+
+function LoadingSkeletons() {
+	return (
+		<Stack gap="md">
+			<SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }}>
+				{Array.from({ length: 4 }).map((_, i) => (
+					<Paper key={i} p="md" radius="md">
+						<Skeleton height={14} width="40%" mb="sm" />
+						<Skeleton height={28} width="60%" mb="xs" />
+						<Skeleton height={12} width="30%" />
+					</Paper>
+				))}
+			</SimpleGrid>
+			<SimpleGrid cols={{ base: 1, lg: 2 }}>
+				{Array.from({ length: 2 }).map((_, i) => (
+					<Paper key={i} p="md" radius="md">
+						<Skeleton height={16} width="35%" mb="md" />
+						<Skeleton height={200} />
+					</Paper>
+				))}
+			</SimpleGrid>
+		</Stack>
+	);
+}
 
 function DashboardIndex() {
 	const {
@@ -41,8 +76,14 @@ function DashboardIndex() {
 		resetLayout,
 	} = useDashboardLayout();
 
+	const { data: insightData, isLoading: insightLoading, error: insightError, fetchMonth, close: closeInsight } = useInsights();
+
 	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
+
+	function handleDrillDown(month: string, year: number) {
+		fetchMonth(month, year);
+	}
 
 	if (error) {
 		return (
@@ -91,7 +132,7 @@ function DashboardIndex() {
 			</Group>
 
 			{isLoading ? (
-				<div>Loading...</div>
+				<LoadingSkeletons />
 			) : (
 				<DashboardGrid
 					widgets={widgets}
@@ -107,6 +148,7 @@ function DashboardIndex() {
 					monthlyRevenue={monthlyRevenue}
 					categoryBreakdown={categoryBreakdown}
 					recentOrders={recentOrders}
+					onDrillDown={handleDrillDown}
 				/>
 			)}
 
@@ -129,6 +171,13 @@ function DashboardIndex() {
 					}}
 				/>
 			</Drawer>
+
+			<InsightPanel
+				data={insightData}
+				isLoading={insightLoading}
+				error={insightError}
+				onClose={closeInsight}
+			/>
 		</Stack>
 	);
 }

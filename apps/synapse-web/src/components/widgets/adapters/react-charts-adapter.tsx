@@ -14,7 +14,7 @@ import {
 	AreaChartInner,
 } from "./chart-components";
 
-function renderLineChart({ data }: LineChartProps) {
+function renderLineChart({ data, onDataPointClick }: LineChartProps) {
 	const chartData = data.map((series) => ({
 		label: series.label,
 		data: series.data.map((point) => ({
@@ -23,10 +23,10 @@ function renderLineChart({ data }: LineChartProps) {
 		})),
 	}));
 
-	return <LineChartInner data={chartData} />;
+	return <LineChartInner data={chartData} onDataPointClick={onDataPointClick} />;
 }
 
-function renderBarChart({ data }: BarChartProps) {
+function renderBarChart({ data, onDataPointClick }: BarChartProps) {
 	const chartData = [
 		{
 			label: "Value",
@@ -37,10 +37,10 @@ function renderBarChart({ data }: BarChartProps) {
 		},
 	];
 
-	return <BarChartInner data={chartData} />;
+	return <BarChartInner data={chartData} onDataPointClick={onDataPointClick} />;
 }
 
-function renderPieChart({ data }: PieChartProps) {
+function renderPieChart({ data, onDataPointClick }: PieChartProps) {
 	const chartData = [
 		{
 			label: "Value",
@@ -51,10 +51,10 @@ function renderPieChart({ data }: PieChartProps) {
 		},
 	];
 
-	return <PieChartInner data={chartData} />;
+	return <PieChartInner data={chartData} onDataPointClick={onDataPointClick} />;
 }
 
-function renderDonutChart({ data }: DonutChartProps) {
+function renderDonutChart({ data, onDataPointClick }: DonutChartProps) {
 	const chartData = [
 		{
 			label: "Value",
@@ -65,10 +65,10 @@ function renderDonutChart({ data }: DonutChartProps) {
 		},
 	];
 
-	return <DonutChartInner data={chartData} />;
+	return <DonutChartInner data={chartData} onDataPointClick={onDataPointClick} />;
 }
 
-function renderAreaChart({ data }: AreaChartProps) {
+function renderAreaChart({ data, onDataPointClick }: AreaChartProps) {
 	const chartData = data.map((series) => ({
 		label: series.label,
 		data: series.data.map((point) => ({
@@ -77,7 +77,7 @@ function renderAreaChart({ data }: AreaChartProps) {
 		})),
 	}));
 
-	return <AreaChartInner data={chartData} />;
+	return <AreaChartInner data={chartData} onDataPointClick={onDataPointClick} />;
 }
 
 export const reactChartsAdapter: ChartAdapter = {

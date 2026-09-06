@@ -19,6 +19,10 @@ class User(Base):
     username = Column(String, unique=True, nullable=False, index=True)
     password_hash = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
+    role = Column(String, nullable=False, default="viewer")
+    email = Column(String, nullable=True)
+    full_name = Column(String, nullable=True)
+    avatar_url = Column(String, nullable=True)
 
 
 async def get_db() -> AsyncSession:

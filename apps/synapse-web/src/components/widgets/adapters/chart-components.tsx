@@ -1,12 +1,18 @@
 import { Chart } from "react-charts";
 import { useLineAxes, useCategoryAxes } from "./chart-hooks";
 import type { LineDatum, CategoryDatum } from "./chart-hooks";
+import type { DataPointClickEvent } from "../chart-adapter";
+
+interface ChartClickHandler {
+	onDataPointClick?: (point: DataPointClickEvent) => void;
+}
 
 export function LineChartInner({
 	data,
+	onDataPointClick,
 }: {
 	data: Array<{ label: string; data: LineDatum[] }>;
-}) {
+} & ChartClickHandler) {
 	const { primaryAxis, secondaryAxes } = useLineAxes();
 
 	return (
@@ -16,6 +22,18 @@ export function LineChartInner({
 					data,
 					primaryAxis,
 					secondaryAxes,
+					onClickDatum: onDataPointClick
+						? (datum) => {
+								if (datum) {
+									onDataPointClick({
+										label: datum.originalDatum.date,
+										value: datum.originalDatum.value,
+										series: datum.seriesLabel,
+										date: datum.originalDatum.date,
+									});
+								}
+							}
+						: undefined,
 				}}
 			/>
 		</div>
@@ -24,9 +42,10 @@ export function LineChartInner({
 
 export function BarChartInner({
 	data,
+	onDataPointClick,
 }: {
 	data: Array<{ label: string; data: CategoryDatum[] }>;
-}) {
+} & ChartClickHandler) {
 	const { primaryAxis, secondaryAxes } = useCategoryAxes("bar");
 
 	return (
@@ -36,6 +55,16 @@ export function BarChartInner({
 					data,
 					primaryAxis,
 					secondaryAxes,
+					onClickDatum: onDataPointClick
+						? (datum) => {
+								if (datum) {
+									onDataPointClick({
+										label: datum.originalDatum.label,
+										value: datum.originalDatum.value,
+									});
+								}
+							}
+						: undefined,
 				}}
 			/>
 		</div>
@@ -44,9 +73,10 @@ export function BarChartInner({
 
 export function PieChartInner({
 	data,
+	onDataPointClick,
 }: {
 	data: Array<{ label: string; data: CategoryDatum[] }>;
-}) {
+} & ChartClickHandler) {
 	const { primaryAxis, secondaryAxes } = useCategoryAxes();
 
 	return (
@@ -56,6 +86,16 @@ export function PieChartInner({
 					data,
 					primaryAxis,
 					secondaryAxes,
+					onClickDatum: onDataPointClick
+						? (datum) => {
+								if (datum) {
+									onDataPointClick({
+										label: datum.originalDatum.label,
+										value: datum.originalDatum.value,
+									});
+								}
+							}
+						: undefined,
 				}}
 			/>
 		</div>
@@ -64,9 +104,10 @@ export function PieChartInner({
 
 export function DonutChartInner({
 	data,
+	onDataPointClick,
 }: {
 	data: Array<{ label: string; data: CategoryDatum[] }>;
-}) {
+} & ChartClickHandler) {
 	const { primaryAxis, secondaryAxes } = useCategoryAxes();
 
 	return (
@@ -76,6 +117,16 @@ export function DonutChartInner({
 					data,
 					primaryAxis,
 					secondaryAxes,
+					onClickDatum: onDataPointClick
+						? (datum) => {
+								if (datum) {
+									onDataPointClick({
+										label: datum.originalDatum.label,
+										value: datum.originalDatum.value,
+									});
+								}
+							}
+						: undefined,
 				}}
 			/>
 		</div>
@@ -84,9 +135,10 @@ export function DonutChartInner({
 
 export function AreaChartInner({
 	data,
+	onDataPointClick,
 }: {
 	data: Array<{ label: string; data: LineDatum[] }>;
-}) {
+} & ChartClickHandler) {
 	const { primaryAxis, secondaryAxes } = useLineAxes();
 
 	return (
@@ -96,6 +148,18 @@ export function AreaChartInner({
 					data,
 					primaryAxis,
 					secondaryAxes,
+					onClickDatum: onDataPointClick
+						? (datum) => {
+								if (datum) {
+									onDataPointClick({
+										label: datum.originalDatum.date,
+										value: datum.originalDatum.value,
+										series: datum.seriesLabel,
+										date: datum.originalDatum.date,
+									});
+								}
+							}
+						: undefined,
 				}}
 			/>
 		</div>

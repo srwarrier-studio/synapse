@@ -3,13 +3,10 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...infrastructure.database import User, get_db
-from ..schemas.auth import LoginRequest, LoginResponse
+from ..auth import create_access_token, verify_password
+from ..schemas.auth import LoginRequest, LoginResponse, UserInfo
 
 router = APIRouter(prefix="/auth", tags=["auth"])
-
-
-def verify_password(plain_password: str, password_hash: str) -> bool:
-    return plain_password == password_hash
 
 
 @router.post("/login", response_model=LoginResponse)
@@ -20,4 +17,19 @@ async def login(body: LoginRequest, db: AsyncSession = Depends(get_db)):
     if user is None or not verify_password(body.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid username or password")
 
-    return LoginResponse(access_token="mock-jwt-token")
+    if not user.is_active:
+        raise HTTPException(status_code=403, detail="Account is disabled")
+
+    token = create_access_token(data={"sub": str(user.id), "role": user.role})
+
+    return LoginResponse(
+        access_token=token,
+        user=UserInfo(
+            id=user.id,
+            username=user.username,
+            role=user.role,
+            full_name=user.full_name,
+            avatar_url=user.avatar_url,
+            email=user.email,
+        ),
+    )

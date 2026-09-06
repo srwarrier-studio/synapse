@@ -1,12 +1,16 @@
 import { AppShell } from "@mantine/core";
-import { Outlet } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 import { Header } from "./Header";
 import { Navbar } from "./Navbar";
 
-export function AppLayout() {
+interface AppLayoutProps {
+	children: ReactNode;
+}
+
+export function AppLayout({ children }: AppLayoutProps) {
 	return (
 		<AppShell
-			header={{ height: 60 }}
+			header={{ height: 56 }}
 			navbar={{ width: 260, breakpoint: "md" }}
 			padding="md"
 		>
@@ -16,9 +20,7 @@ export function AppLayout() {
 			<AppShell.Navbar>
 				<Navbar />
 			</AppShell.Navbar>
-			<AppShell.Main>
-				<Outlet />
-			</AppShell.Main>
+			<AppShell.Main>{children}</AppShell.Main>
 		</AppShell>
 	);
 }

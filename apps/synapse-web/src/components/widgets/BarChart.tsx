@@ -1,6 +1,6 @@
 import { Paper, Text, Group, Badge, Stack } from "@mantine/core";
 import type { CategoryDataPoint } from "../../domain/entities/widget";
-import type { ChartDataPoint } from "./chart-adapter";
+import type { ChartDataPoint, DataPointClickEvent } from "./chart-adapter";
 import { useChartAdapter } from "./ChartProvider";
 
 interface BarChartProps {
@@ -9,6 +9,7 @@ interface BarChartProps {
 	valueLabel?: string;
 	showLegend?: boolean;
 	formatValue?: (value: number) => string;
+	onDataPointClick?: (point: DataPointClickEvent) => void;
 }
 
 const defaultFormatValue = (v: number) => v.toLocaleString();
@@ -28,12 +29,13 @@ export function BarChart({
 	valueLabel,
 	showLegend = false,
 	formatValue = defaultFormatValue,
+	onDataPointClick,
 }: BarChartProps) {
 	const chart = useChartAdapter();
 	const chartData = transformData(data);
 
 	return (
-		<Paper p="md" radius="sm" h="100%" style={{ display: "flex", flexDirection: "column" }}>
+		<Paper p="md" radius="md" h="100%" style={{ display: "flex", flexDirection: "column", cursor: onDataPointClick ? "pointer" : "default" }}>
 			<Group justify="space-between" mb="md" style={{ flexShrink: 0 }}>
 				<Text fw={600}>{title}</Text>
 				<Group gap="xs">
@@ -48,7 +50,7 @@ export function BarChart({
 				</Group>
 			</Group>
 			<div style={{ flex: 1, minHeight: 0 }}>
-				{chart.renderBarChart({ data: chartData })}
+				{chart.renderBarChart({ data: chartData, onDataPointClick })}
 			</div>
 			{showLegend && (
 				<Stack gap="xs" mt="md" style={{ flexShrink: 0 }}>
