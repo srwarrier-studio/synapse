@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from ...domain.interfaces import AbstractSalesRepository
+from ...infrastructure.database import User
+from ..auth import require_role
 from ..deps import get_sales_repo
 from ..schemas.sales import SalesOrderListResponse, SalesOrderSchema
 
@@ -36,6 +38,7 @@ async def list_sales(
     region: str | None = None,
     status: str | None = None,
     repo: AbstractSalesRepository = Depends(get_sales_repo),
+    user: User = Depends(require_role("management", "sales")),
 ):
     orders, total = await repo.list_orders(page, limit, region, status)
     return SalesOrderListResponse(
@@ -49,6 +52,7 @@ async def list_sales(
 async def get_sales(
     order_id: str,
     repo: AbstractSalesRepository = Depends(get_sales_repo),
+    user: User = Depends(require_role("management", "sales")),
 ):
     order = await repo.get_order(order_id)
     if not order:

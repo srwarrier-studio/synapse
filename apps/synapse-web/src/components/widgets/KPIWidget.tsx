@@ -12,6 +12,15 @@ interface KPIWidgetProps {
 
 const defaultFormatValue = (v: number | string) => String(v);
 
+const COLOR_MAP: Record<string, string> = {
+	"synapse-blue": "#0078d4",
+	"sami-green": "#2e7d32",
+	teal: "#0d9488",
+	orange: "#f97316",
+	violet: "#7c3aed",
+	red: "#dc2626",
+};
+
 export function KPIWidget({
 	title,
 	data,
@@ -21,9 +30,15 @@ export function KPIWidget({
 }: KPIWidgetProps) {
 	const { value, change, changeLabel, secondaryValue } = data;
 	const isPositive = change !== undefined && change > 0;
+	const borderColor = COLOR_MAP[color] || color;
 
 	return (
-		<Paper p="md" radius="sm" bg="white">
+		<Paper
+			p="md"
+			radius="md"
+			bg="white"
+			style={{ borderLeft: `4px solid ${borderColor}` }}
+		>
 			<Group justify="space-between" align="flex-start">
 				<div>
 					<Text
@@ -33,7 +48,14 @@ export function KPIWidget({
 					>
 						{title}
 					</Text>
-					<Text fw={600} style={{ fontSize: "var(--mantine-font-size-xl)", lineHeight: 1.2, marginTop: "var(--mantine-spacing-xs)" }}>
+					<Text
+						fw={700}
+						style={{
+							fontSize: "var(--mantine-font-size-xl)",
+							lineHeight: 1.2,
+							marginTop: "var(--mantine-spacing-xs)",
+						}}
+					>
 						{formatValue(value)}
 					</Text>
 					{change !== undefined && (
@@ -53,7 +75,7 @@ export function KPIWidget({
 							<Text
 								size="xs"
 								c={isPositive ? "sami-green" : "red"}
-								fw={500}
+								fw={600}
 							>
 								{isPositive ? "+" : ""}
 								{change}%
@@ -71,7 +93,7 @@ export function KPIWidget({
 						</Text>
 					)}
 				</div>
-				<ThemeIcon size={40} radius="sm" color={color} variant="light">
+				<ThemeIcon size={40} radius="md" color={color} variant="light">
 					{icon}
 				</ThemeIcon>
 			</Group>

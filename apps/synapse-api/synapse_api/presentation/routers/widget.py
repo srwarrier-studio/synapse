@@ -1,17 +1,22 @@
-from fastapi import APIRouter
-from synapse_api.presentation.schemas.widget import (
-    WidgetConfig,
-    WidgetDataRequest,
+from fastapi import APIRouter, Depends
+
+from ...infrastructure.database import User
+from ...infrastructure.widget_resolver import widget_resolver
+from ..auth import get_current_user
+from ..schemas.widget import (
     DashboardDataRequest,
     DashboardDataResponse,
+    WidgetConfig,
 )
-from synapse_api.infrastructure.widget_resolver import widget_resolver
 
 router = APIRouter(prefix="/widgets", tags=["widgets"])
 
 
 @router.post("/data", response_model=DashboardDataResponse)
-async def get_widget_data(request: DashboardDataRequest):
+async def get_widget_data(
+    request: DashboardDataRequest,
+    user: User = Depends(get_current_user),
+):
     """Synthesize data for multiple widgets in a single request."""
     result = {}
     for widget in request.widgets:
@@ -21,7 +26,11 @@ async def get_widget_data(request: DashboardDataRequest):
 
 
 @router.post("/{widget_id}/data")
-async def get_single_widget_data(widget_id: str, config: WidgetConfig):
+async def get_single_widget_data(
+    widget_id: str,
+    config: WidgetConfig,
+    user: User = Depends(get_current_user),
+):
     """Get data for a single widget."""
     data = widget_resolver.resolve(config.dataKey, config.params)
     return {"id": widget_id, "data": data}

@@ -1,5 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
+from ...infrastructure.database import User
+from ..auth import get_current_user
 from ..schemas.dashboard import (
     CategoryBreakdown,
     DashboardSummary,
@@ -181,7 +183,7 @@ RECENT_ORDERS = [
 
 
 @router.get("/summary", response_model=DashboardSummary)
-async def get_summary():
+async def get_summary(user: User = Depends(get_current_user)):
     return DashboardSummary(
         revenue=48250000,
         orders=12847,
@@ -193,7 +195,7 @@ async def get_summary():
 
 
 @router.get("/sales-trend", response_model=list[SalesTrendPoint])
-async def get_sales_trend():
+async def get_sales_trend(user: User = Depends(get_current_user)):
     points = []
     for i, month in enumerate(MONTHS):
         for region in REGIONS:
@@ -208,7 +210,7 @@ async def get_sales_trend():
 
 
 @router.get("/top-products", response_model=list[TopProduct])
-async def get_top_products():
+async def get_top_products(user: User = Depends(get_current_user)):
     return [
         TopProduct(name="Curcumin C3 Complex", revenue=8920000, units=45200),
         TopProduct(name="AprèsFlex (Boswellia)", revenue=7560000, units=38900),
@@ -222,7 +224,7 @@ async def get_top_products():
 
 
 @router.get("/regional-performance", response_model=list[RegionalPerformance])
-async def get_regional_performance():
+async def get_regional_performance(user: User = Depends(get_current_user)):
     performance = []
     for region in REGIONS:
         amounts = SALES_BY_REGION[region]
@@ -242,7 +244,7 @@ async def get_regional_performance():
 
 
 @router.get("/order-status", response_model=list[OrderStatus])
-async def get_order_status():
+async def get_order_status(user: User = Depends(get_current_user)):
     return [
         OrderStatus(status=status, count=count, percentage=percentage)
         for status, count, percentage in ORDER_STATUSES
@@ -250,17 +252,19 @@ async def get_order_status():
 
 
 @router.get("/monthly-revenue", response_model=list[MonthlyRevenue])
-async def get_monthly_revenue():
+async def get_monthly_revenue(user: User = Depends(get_current_user)):
     monthly = []
     for i, month in enumerate(MONTHS):
         total_revenue = sum(SALES_BY_REGION[region][i] for region in REGIONS)
         orders = int(total_revenue / 3750)
-        monthly.append(MonthlyRevenue(month=month, revenue=total_revenue, orders=orders))
+        monthly.append(
+            MonthlyRevenue(month=month, revenue=total_revenue, orders=orders)
+        )
     return monthly
 
 
 @router.get("/category-breakdown", response_model=list[CategoryBreakdown])
-async def get_category_breakdown():
+async def get_category_breakdown(user: User = Depends(get_current_user)):
     total_revenue = sum(cat["revenue"] for cat in PRODUCT_CATEGORIES.values())
     breakdown = []
     for category, data in PRODUCT_CATEGORIES.items():
@@ -277,5 +281,5 @@ async def get_category_breakdown():
 
 
 @router.get("/recent-orders", response_model=list[RecentOrder])
-async def get_recent_orders():
+async def get_recent_orders(user: User = Depends(get_current_user)):
     return RECENT_ORDERS

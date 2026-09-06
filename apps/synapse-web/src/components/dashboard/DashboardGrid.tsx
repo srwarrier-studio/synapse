@@ -34,6 +34,7 @@ interface DashboardGridProps {
 	monthlyRevenue?: MonthlyRevenue[];
 	categoryBreakdown?: CategoryBreakdown[];
 	recentOrders?: RecentOrder[];
+	onDrillDown?: (month: string, year: number) => void;
 }
 
 export function DashboardGrid({
@@ -50,6 +51,7 @@ export function DashboardGrid({
 	monthlyRevenue = [],
 	categoryBreakdown = [],
 	recentOrders = [],
+	onDrillDown,
 }: DashboardGridProps) {
 	const { width, containerRef, mounted } = useContainerWidth();
 
@@ -110,6 +112,7 @@ export function DashboardGrid({
 									monthlyRevenue={monthlyRevenue}
 									categoryBreakdown={categoryBreakdown}
 									recentOrders={recentOrders}
+									onDrillDown={onDrillDown}
 								/>
 							</DraggableChart>
 						</div>

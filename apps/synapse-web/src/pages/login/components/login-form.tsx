@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
-import { ApiError, request } from "../../../data/api-client";
+import { login } from "../../../data/auth";
 
 interface LoginValues {
 	username: string;
@@ -36,30 +36,6 @@ function handleUsernamePaste(e: React.ClipboardEvent<HTMLInputElement>) {
 	}
 }
 
-async function loginRequest(
-	values: LoginValues,
-	onSuccess?: () => void,
-): Promise<{ error?: string }> {
-	try {
-		await request("/auth/login", {
-			method: "POST",
-			body: JSON.stringify(values),
-		});
-		onSuccess?.();
-		return {};
-	} catch (err) {
-		if (err instanceof ApiError) {
-			return {
-				error:
-					err.status === 401
-						? "Invalid username or password"
-						: "Login failed. Please try again.",
-			};
-		}
-		return { error: "Network error. Please check your connection." };
-	}
-}
-
 export function LoginForm({ onSuccess }: LoginFormProps) {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -74,12 +50,6 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 			username: (value) => (value.length >= 1 ? null : "Username is required"),
 			password: (value) => {
 				if (!value) return "Password is required";
-				if (/\s/.test(value)) return "Password must not contain spaces";
-				if (value.length < 8) return "Password must be at least 8 characters";
-				if (!/[A-Z]/.test(value)) return "Password must contain an uppercase letter";
-				if (!/[a-z]/.test(value)) return "Password must contain a lowercase letter";
-				if (!/[0-9]/.test(value)) return "Password must contain a number";
-				if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) return "Password must contain a special character";
 				return null;
 			},
 		},
@@ -89,13 +59,18 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 		setLoading(true);
 		setError(null);
 
-		const result = await loginRequest(values, onSuccess);
-
-		if (result.error) {
-			setError(result.error);
+		try {
+			await login(values.username, values.password);
+			onSuccess?.();
+		} catch (err) {
+			if (err instanceof Error) {
+				setError(err.message.includes("401") ? "Invalid username or password" : "Login failed");
+			} else {
+				setError("Network error. Please check your connection.");
+			}
+		} finally {
+			setLoading(false);
 		}
-
-		setLoading(false);
 	}
 
 	return (

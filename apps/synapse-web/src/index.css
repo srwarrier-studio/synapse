@@ -65,6 +65,17 @@ body {
 	box-sizing: border-box;
 }
 
+*,
+*::before,
+*::after {
+	transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+::selection {
+	background: rgba(0, 120, 212, 0.15);
+	color: var(--text);
+}
+
 h1,
 h2 {
 	font-family: var(--heading);

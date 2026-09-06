@@ -17,27 +17,39 @@ export interface MultiSeriesData {
 	data: TimeSeriesPoint[];
 }
 
+export interface DataPointClickEvent {
+	label: string;
+	value: number;
+	series?: string;
+	date?: string;
+}
+
 export interface LineChartProps {
 	data: MultiSeriesData[];
+	onDataPointClick?: (point: DataPointClickEvent) => void;
 }
 
 export interface BarChartProps {
 	data: ChartDataPoint[];
 	stacked?: boolean;
+	onDataPointClick?: (point: DataPointClickEvent) => void;
 }
 
 export interface PieChartProps {
 	data: ChartDataPoint[];
+	onDataPointClick?: (point: DataPointClickEvent) => void;
 }
 
 export interface DonutChartProps {
 	data: ChartDataPoint[];
 	centerValue?: string;
+	onDataPointClick?: (point: DataPointClickEvent) => void;
 }
 
 export interface AreaChartProps {
 	data: MultiSeriesData[];
 	stacked?: boolean;
+	onDataPointClick?: (point: DataPointClickEvent) => void;
 }
 
 export interface ChartAdapter {

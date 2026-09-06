@@ -9,13 +9,26 @@ export class ApiError extends Error {
 }
 
 export async function request<T>(path: string, init?: RequestInit): Promise<T> {
+	const token = localStorage.getItem("synapse_token");
+
+	const headers = new Headers(init?.headers);
+	headers.set("Content-Type", "application/json");
+	if (token) {
+		headers.set("Authorization", `Bearer ${token}`);
+	}
+
 	const res = await fetch(`${BASE_URL}${path}`, {
 		...init,
-		headers: {
-			"Content-Type": "application/json",
-			...init?.headers,
-		},
+		headers,
 	});
+
+	if (res.status === 401) {
+		localStorage.removeItem("synapse_token");
+		localStorage.removeItem("synapse_user");
+		window.location.href = "/";
+		throw new ApiError(401, "Session expired");
+	}
+
 	if (!res.ok) {
 		throw new ApiError(res.status, `API error: ${res.status}`);
 	}

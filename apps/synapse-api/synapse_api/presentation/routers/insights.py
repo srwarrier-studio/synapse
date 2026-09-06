@@ -1,0 +1,175 @@
+# ruff: noqa: E501
+from fastapi import APIRouter, Depends
+
+from ...infrastructure.database import User
+from ..auth import get_current_user
+from ..schemas.insights import InsightFactor, MonthlyContributors
+
+router = APIRouter(prefix="/api/insights", tags=["insights"])
+
+MONTHS_DATA: dict[str, dict] = {
+    "Jan": {
+        "totalRevenue": 3_960_000,
+        "previousRevenue": 3_820_000,
+        "changePercent": 3.7,
+        "summary": "Steady start to the year with moderate growth driven by steady demand for Nutraceuticals in India and Europe.",
+        "factors": [
+            InsightFactor(category="product", name="Curcumin C3 Complex", impact="medium", changePercent=5.2, revenueImpact=85_000, details="Consistent demand from Indian domestic market"),
+            InsightFactor(category="product", name="LactoSpore Probiotics", impact="low", changePercent=2.1, revenueImpact=18_000, details="Stable demand in Southeast Asia"),
+            InsightFactor(category="cost", name="Turmeric (Curcuma longa)", impact="low", savings=200, details="Seasonal pricing stable at start of year"),
+            InsightFactor(category="production", name="Extract Production Volume", impact="low", changePercent=1.5, additionalVolume="2 tonnes", details="Normal production levels after holiday break"),
+        ],
+    },
+    "Feb": {
+        "totalRevenue": 3_590_000,
+        "previousRevenue": 3_960_000,
+        "changePercent": -9.3,
+        "summary": "Shorter month with reduced working days. Revenue dip is seasonal and within normal range.",
+        "factors": [
+            InsightFactor(category="product", name="All Products", impact="medium", changePercent=-9.3, revenueImpact=-370_000, details="28-day month reduces production capacity by ~7%"),
+            InsightFactor(category="cost", name="Turmeric (Curcuma longa)", impact="low", savings=100, details="Stable pricing, minor negotiation wins"),
+            InsightFactor(category="production", name="Extract Production Volume", impact="low", changePercent=-5.0, additionalVolume="-3 tonnes", details="Reduced working days impact output"),
+        ],
+    },
+    "Mar": {
+        "totalRevenue": 4_320_000,
+        "previousRevenue": 3_590_000,
+        "changePercent": 20.3,
+        "summary": "Strong recovery driven by quarter-end push and new order from NutriVita Labs USA for Curcumin.",
+        "factors": [
+            InsightFactor(category="product", name="Curcumin C3 Complex", impact="high", changePercent=28.0, revenueImpact=320_000, details="Large order from NutriVita Labs, USA - 5 tonne shipment"),
+            InsightFactor(category="product", name="AprèsFlex (Boswellia)", impact="medium", changePercent=15.0, revenueImpact=95_000, details="Increased demand from European supplement brands"),
+            InsightFactor(category="cost", name="Boswellia Serrata", impact="medium", savings=800, details="Bulk purchase discount from Himalayan supplier"),
+            InsightFactor(category="production", name="Extract Production Volume", impact="high", changePercent=18.0, additionalVolume="8 tonnes", details="Bangalore Unit 2 running at full capacity"),
+        ],
+    },
+    "Apr": {
+        "totalRevenue": 4_080_000,
+        "previousRevenue": 4_320_000,
+        "changePercent": -5.6,
+        "summary": "Post-quarter normalization. New order pipeline strong but shipments shifted to May.",
+        "factors": [
+            InsightFactor(category="product", name="Curcumin C3 Complex", impact="medium", changePercent=-8.0, revenueImpact=-120_000, details="Large March order not repeated in April"),
+            InsightFactor(category="product", name="Forslean (Forskolin)", impact="low", changePercent=3.0, revenueImpact=22_000, details="Steady demand from weight management segment"),
+            InsightFactor(category="cost", name="Turmeric (Curcuma longa)", impact="low", savings=150, details="Pre-monsoon harvest keeping prices stable"),
+            InsightFactor(category="production", name="Extract Production Volume", impact="low", changePercent=-3.0, additionalVolume="-2 tonnes", details="Planned maintenance shutdown at Mysore unit"),
+        ],
+    },
+    "May": {
+        "totalRevenue": 4_560_000,
+        "previousRevenue": 4_080_000,
+        "changePercent": 11.8,
+        "summary": "Strong growth from new Southeast Asia distribution deal and increased probiotics demand.",
+        "factors": [
+            InsightFactor(category="product", name="LactoSpore Probiotics", impact="high", changePercent=25.0, revenueImpact=180_000, details="New distribution deal with AsiaNutraceuticals Singapore"),
+            InsightFactor(category="product", name="Curcumin C3 Complex", impact="medium", changePercent=8.0, revenueImpact=110_000, details="Continued US demand"),
+            InsightFactor(category="cost", name="Turmeric (Curcuma longa)", impact="medium", savings=500, details="Early monsoon harvest arriving, prices dropping"),
+            InsightFactor(category="production", name="Extract Production Volume", impact="medium", changePercent=10.0, additionalVolume="5 tonnes", details="All units operational after April maintenance"),
+        ],
+    },
+    "Jun": {
+        "totalRevenue": 4_780_000,
+        "previousRevenue": 4_320_000,
+        "changePercent": 10.6,
+        "summary": "Sales increased 10.6% driven by strong Curcumin demand, lower raw material costs, and increased production capacity from new extraction line.",
+        "factors": [
+            InsightFactor(category="product", name="Curcumin C3 Complex", impact="high", changePercent=20.0, revenueImpact=320_000, details="Strong demand from North America and Europe for anti-inflammatory supplements"),
+            InsightFactor(category="product", name="AprèsFlex (Boswellia)", impact="medium", changePercent=12.0, revenueImpact=75_000, details="European customers increasing reorder quantities"),
+            InsightFactor(category="cost", name="Turmeric (Curcuma longa)", impact="medium", savings=1_000, details="Raw material cost ₹1,000/ton lower than May due to peak harvest season"),
+            InsightFactor(category="cost", name="Boswellia Serrata", impact="low", savings=400, details="Continued bulk pricing from suppliers"),
+            InsightFactor(category="production", name="Extract Production Volume", impact="high", changePercent=15.0, additionalVolume="10 tonnes", details="New extraction line operational from June 1 at Bangalore Unit 1"),
+        ],
+    },
+    "Jul": {
+        "totalRevenue": 4_530_000,
+        "previousRevenue": 4_780_000,
+        "changePercent": -5.2,
+        "summary": "Monsoon season impacts logistics. Revenue dip is primarily due to shipment delays, not demand reduction.",
+        "factors": [
+            InsightFactor(category="product", name="Curcumin C3 Complex", impact="low", changePercent=-3.0, revenueImpact=-45_000, details="Demand stable, 2 shipments delayed due to monsoon logistics"),
+            InsightFactor(category="product", name="Citrin (Garcinia)", impact="medium", changePercent=-15.0, revenueImpact=-65_000, details="Seasonal dip in weight management segment"),
+            InsightFactor(category="cost", name="Turmeric (Curcuma longa)", impact="low", savings=100, details="Monsoon affecting harvest, prices stabilizing"),
+            InsightFactor(category="production", name="Extract Production Volume", impact="low", changePercent=-2.0, additionalVolume="-1 tonne", details="Minor disruption at Mysore unit due to flooding"),
+        ],
+    },
+    "Aug": {
+        "totalRevenue": 4_890_000,
+        "previousRevenue": 4_530_000,
+        "changePercent": 7.9,
+        "summary": "Recovery from monsoon delays. Backlog shipments cleared and new orders from Middle East.",
+        "factors": [
+            InsightFactor(category="product", name="Curcumin C3 Complex", impact="high", changePercent=12.0, revenueImpact=180_000, details="Cleared backlog plus new orders from Gulf Health Supplements"),
+            InsightFactor(category="product", name="Holimel (Melatonin)", impact="medium", changePercent=18.0, revenueImpact=55_000, details="Growing demand in European sleep supplement market"),
+            InsightFactor(category="cost", name="Melatonin (synthetic)", impact="low", savings=300, details="New supplier offering competitive pricing"),
+            InsightFactor(category="production", name="Extract Production Volume", impact="medium", changePercent=8.0, additionalVolume="4 tonnes", details="All units back to full capacity"),
+        ],
+    },
+    "Sep": {
+        "totalRevenue": 5_100_000,
+        "previousRevenue": 4_890_000,
+        "changePercent": 4.3,
+        "summary": "Quarter-end push with strong performance across all regions. India domestic market leading growth.",
+        "factors": [
+            InsightFactor(category="product", name="Curcumin C3 Complex", impact="high", changePercent=10.0, revenueImpact=150_000, details="Indian Ayurvedic brands increasing orders for festive season"),
+            InsightFactor(category="product", name="Forslean (Forskolin)", impact="medium", changePercent=8.0, revenueImpact=45_000, details="US market showing renewed interest"),
+            InsightFactor(category="cost", name="Turmeric (Curcuma longa)", impact="medium", savings=600, details="Post-monsoon harvest bringing prices down further"),
+            InsightFactor(category="production", name="Extract Production Volume", impact="medium", changePercent=5.0, additionalVolume="3 tonnes", details="Running overtime at Bangalore units to meet festive demand"),
+        ],
+    },
+    "Oct": {
+        "totalRevenue": 5_280_000,
+        "previousRevenue": 5_100_000,
+        "changePercent": 3.5,
+        "summary": "Sustained growth with Diwali season boost in India. International orders steady.",
+        "factors": [
+            InsightFactor(category="product", name="Curcumin C3 Complex", impact="high", changePercent=8.0, revenueImpact=120_000, details="Diwali season health supplement demand surge"),
+            InsightFactor(category="product", name="Saberry (Amla)", impact="medium", changePercent=12.0, revenueImpact=35_000, details="Indian immunity supplement market growing"),
+            InsightFactor(category="cost", name="Amla (Indian Gooseberry)", impact="low", savings=200, details="Fresh harvest season reducing procurement costs"),
+            InsightFactor(category="production", name="Extract Production Volume", impact="low", changePercent=2.0, additionalVolume="1 tonne", details="Steady production, inventory building for year-end"),
+        ],
+    },
+    "Nov": {
+        "totalRevenue": 5_450_000,
+        "previousRevenue": 5_280_000,
+        "changePercent": 3.2,
+        "summary": "Pre-holiday inventory buildup by international distributors. Strong finish to Q3.",
+        "factors": [
+            InsightFactor(category="product", name="Curcumin C3 Complex", impact="high", changePercent=6.0, revenueImpact=90_000, details="US distributors building inventory for holiday season"),
+            InsightFactor(category="product", name="LactoSpore Probiotics", impact="medium", changePercent=10.0, revenueImpact=65_000, details="Year-end restocking across Southeast Asia"),
+            InsightFactor(category="cost", name="Packaging Materials", impact="low", savings=150, details="Bulk packaging order reducing per-unit cost"),
+            InsightFactor(category="production", name="Extract Production Volume", impact="medium", changePercent=4.0, additionalVolume="2 tonnes", details="Increased shifts to build year-end inventory"),
+        ],
+    },
+    "Dec": {
+        "totalRevenue": 5_820_000,
+        "previousRevenue": 5_450_000,
+        "changePercent": 6.8,
+        "summary": "Best month of the year. Year-end rush, annual contracts renewal, and strong holiday demand across all regions.",
+        "factors": [
+            InsightFactor(category="product", name="Curcumin C3 Complex", impact="high", changePercent=15.0, revenueImpact=220_000, details="Annual contract renewals from top 5 US customers"),
+            InsightFactor(category="product", name="AprèsFlex (Boswellia)", impact="high", changePercent=12.0, revenueImpact=85_000, details="European customers placing Q1 orders early"),
+            InsightFactor(category="product", name="LactoSpore Probiotics", impact="medium", changePercent=8.0, revenueImpact=55_000, details="Year-end health resolution driving consumer demand"),
+            InsightFactor(category="cost", name="Turmeric (Curcuma longa)", impact="medium", savings=800, details="Year-end supplier discounts and bulk deals"),
+            InsightFactor(category="cost", name="Boswellia Serrata", impact="low", savings=350, details="Supplier loyalty bonus applied"),
+            InsightFactor(category="production", name="Extract Production Volume", impact="high", changePercent=10.0, additionalVolume="6 tonnes", details="Record production month, all units running at capacity"),
+        ],
+    },
+}
+
+
+@router.get("/monthly-contributors", response_model=MonthlyContributors)
+async def get_monthly_contributors(
+    month: str = "Jun",
+    year: int = 2024,
+    user: User = Depends(get_current_user),
+):
+    data = MONTHS_DATA.get(month, MONTHS_DATA["Jun"])
+    return MonthlyContributors(
+        month=month,
+        year=year,
+        totalRevenue=data["totalRevenue"],
+        previousRevenue=data["previousRevenue"],
+        changePercent=data["changePercent"],
+        summary=data["summary"],
+        factors=data["factors"],
+    )

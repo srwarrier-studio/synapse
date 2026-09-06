@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends
 
 from ...domain.interfaces import AbstractInventoryRepository
+from ...infrastructure.database import User
+from ..auth import require_role
 from ..deps import get_inventory_repo
 from ..schemas.inventory import (
     MaterialMovementSchema,
@@ -41,6 +43,7 @@ async def list_stock(
     warehouse: str | None = None,
     low_stock: bool = False,
     repo: AbstractInventoryRepository = Depends(get_inventory_repo),
+    user: User = Depends(require_role("management", "operations")),
 ):
     levels, total = await repo.list_stock_levels(warehouse, low_stock)
     return StockLevelListResponse(
@@ -55,6 +58,7 @@ async def list_movements(
     date_to: str | None = None,
     movement_type: str | None = None,
     repo: AbstractInventoryRepository = Depends(get_inventory_repo),
+    user: User = Depends(require_role("management", "operations")),
 ):
     movements, total = await repo.list_movements(date_from, date_to, movement_type)
     return MovementListResponse(

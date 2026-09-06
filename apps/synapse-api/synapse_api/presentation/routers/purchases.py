@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends
 
 from ...domain.interfaces import AbstractPurchasesRepository
+from ...infrastructure.database import User
+from ..auth import require_role
 from ..deps import get_purchases_repo
 from ..schemas.purchases import (
     PurchaseOrderListResponse,
@@ -40,6 +42,7 @@ async def list_purchases(
     vendor: str | None = None,
     status: str | None = None,
     repo: AbstractPurchasesRepository = Depends(get_purchases_repo),
+    user: User = Depends(require_role("management", "finance", "operations")),
 ):
     orders, total = await repo.list_orders(page, limit, vendor, status)
     return PurchaseOrderListResponse(
@@ -52,6 +55,7 @@ async def list_purchases(
 @router.get("/summary", response_model=list[VendorSummarySchema])
 async def get_vendor_summary(
     repo: AbstractPurchasesRepository = Depends(get_purchases_repo),
+    user: User = Depends(require_role("management", "finance", "operations")),
 ):
     summary = await repo.get_vendor_summary()
     return [
