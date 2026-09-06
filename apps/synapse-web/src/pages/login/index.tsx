@@ -1,12 +1,7 @@
 import {
-	Center,
 	Flex,
-	Group,
-	Image,
 	Paper,
 	Stack,
-	Text,
-	Title,
 } from "@mantine/core";
 import { useNavigate } from "@tanstack/react-router";
 import { LoginForm } from "./components/login-form";

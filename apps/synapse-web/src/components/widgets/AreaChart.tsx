@@ -1,0 +1,64 @@
+import { Paper, Text, Group, Badge } from "@mantine/core";
+import type { TimeSeriesDataPoint } from "../../domain/entities/widget";
+import type { MultiSeriesData } from "./chart-adapter";
+import { useChartAdapter } from "./ChartProvider";
+
+interface AreaChartProps {
+	data: TimeSeriesDataPoint[];
+	title?: string;
+	valueLabel?: string;
+	seriesLabel?: string;
+	stacked?: boolean;
+}
+
+function transformData(data: TimeSeriesDataPoint[], seriesLabel: string): MultiSeriesData[] {
+	const seriesMap = new Map<string, Array<{ date: string; value: number }>>();
+
+	for (const point of data) {
+		const key = point.series || "default";
+		if (!seriesMap.has(key)) {
+			seriesMap.set(key, []);
+		}
+		seriesMap.get(key)!.push({
+			date: point.date,
+			value: point.value,
+		});
+	}
+
+	return Array.from(seriesMap.entries()).map(([series, points]) => ({
+		label: series === "default" ? seriesLabel : series,
+		data: points,
+	}));
+}
+
+export function AreaChart({
+	data,
+	title = "Area Chart",
+	valueLabel,
+	seriesLabel = "Value",
+	stacked = false,
+}: AreaChartProps) {
+	const chart = useChartAdapter();
+	const chartData = transformData(data, seriesLabel);
+
+	return (
+		<Paper p="md" radius="sm" h="100%" style={{ display: "flex", flexDirection: "column" }}>
+			<Group justify="space-between" mb="md" style={{ flexShrink: 0 }}>
+				<Text fw={600}>{title}</Text>
+				<Group gap="xs">
+					{valueLabel && (
+						<Badge variant="light" color="synapse-blue" size="sm">
+							{valueLabel}
+						</Badge>
+					)}
+					<Badge variant="light" color="gray" size="sm">
+						{data.length} points
+					</Badge>
+				</Group>
+			</Group>
+			<div style={{ flex: 1, minHeight: 0 }}>
+				{chart.renderAreaChart({ data: chartData, stacked })}
+			</div>
+		</Paper>
+	);
+}

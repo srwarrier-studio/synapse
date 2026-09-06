@@ -9,7 +9,7 @@ import {
 	TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { ApiError, request } from "../../../data/api-client";
 
 interface LoginValues {
@@ -22,6 +22,43 @@ interface LoginFormProps {
 }
 
 const ALLOWED_USERNAME = /^[a-zA-Z0-9_]*$/;
+
+function handleUsernameKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+	if (!ALLOWED_USERNAME.test(e.key) && !["Backspace", "Tab", "Enter"].includes(e.key)) {
+		e.preventDefault();
+	}
+}
+
+function handleUsernamePaste(e: React.ClipboardEvent<HTMLInputElement>) {
+	const pasted = e.clipboardData.getData("text");
+	if (!ALLOWED_USERNAME.test(pasted)) {
+		e.preventDefault();
+	}
+}
+
+async function loginRequest(
+	values: LoginValues,
+	onSuccess?: () => void,
+): Promise<{ error?: string }> {
+	try {
+		await request("/auth/login", {
+			method: "POST",
+			body: JSON.stringify(values),
+		});
+		onSuccess?.();
+		return {};
+	} catch (err) {
+		if (err instanceof ApiError) {
+			return {
+				error:
+					err.status === 401
+						? "Invalid username or password"
+						: "Login failed. Please try again.",
+			};
+		}
+		return { error: "Network error. Please check your connection." };
+	}
+}
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
 	const [loading, setLoading] = useState(false);
@@ -48,43 +85,18 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 		},
 	});
 
-	const handleUsernameKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (!ALLOWED_USERNAME.test(e.key) && !["Backspace", "Tab", "Enter"].includes(e.key)) {
-			e.preventDefault();
-		}
-	}, []);
-
-	const handleUsernamePaste = useCallback((e: React.ClipboardEvent<HTMLInputElement>) => {
-		const pasted = e.clipboardData.getData("text");
-		if (!ALLOWED_USERNAME.test(pasted)) {
-			e.preventDefault();
-		}
-	}, []);
-
-	const handleSubmit = useCallback(async (values: LoginValues) => {
+	async function handleSubmit(values: LoginValues) {
 		setLoading(true);
 		setError(null);
 
-		try {
-			await request("/auth/login", {
-				method: "POST",
-				body: JSON.stringify(values),
-			});
-			onSuccess?.();
-		} catch (err) {
-			if (err instanceof ApiError) {
-				setError(
-					err.status === 401
-						? "Invalid username or password"
-						: "Login failed. Please try again.",
-				);
-			} else {
-				setError("Network error. Please check your connection.");
-			}
-		} finally {
-			setLoading(false);
+		const result = await loginRequest(values, onSuccess);
+
+		if (result.error) {
+			setError(result.error);
 		}
-	}, [onSuccess]);
+
+		setLoading(false);
+	}
 
 	return (
 		<form onSubmit={form.onSubmit(handleSubmit)}>

@@ -11,7 +11,7 @@ const synapseBlue = [
 	"#004e8c",
 	"#00396b",
 	"#00254a",
-];
+] as const;
 
 const samiGreen = [
 	"#e6f4e6",
@@ -24,7 +24,7 @@ const samiGreen = [
 	"#1a531a",
 	"#133f13",
 	"#0d2b0d",
-];
+] as const;
 
 const neutralGray = [
 	"#fafafa",
@@ -37,7 +37,7 @@ const neutralGray = [
 	"#6b6b6b",
 	"#555555",
 	"#424242",
-];
+] as const;
 
 export const theme = createTheme({
 	primaryColor: "synapse-blue",
@@ -116,7 +116,7 @@ export const theme = createTheme({
 				radius: "xs",
 				variant: "filled",
 			},
-			styles: (_theme, params) => ({
+			styles: () => ({
 				root: {
 					height: "32px",
 					paddingInline: "16px",
@@ -156,7 +156,7 @@ export const theme = createTheme({
 				radius: "xs",
 				size: "md",
 			},
-			styles: (_theme, params) => ({
+			styles: () => ({
 				input: {
 					height: "32px",
 					minHeight: "32px",
@@ -276,7 +276,7 @@ export const theme = createTheme({
 				variant: "subtle",
 				radius: "xs",
 			},
-			styles: (_theme, params) => ({
+			styles: () => ({
 				root: {
 					borderRadius: "2px",
 					fontSize: "14px",
