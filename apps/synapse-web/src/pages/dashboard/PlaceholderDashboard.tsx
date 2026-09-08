@@ -5,7 +5,14 @@ import {
 	MediumCard,
 	WideCard,
 } from "../../components/cards";
-import { KPICard } from "../../components/charts";
+import {
+	KPICard,
+	KPILabel,
+	KPIValue,
+	KPITrend,
+	KPIStats,
+	KPIStat,
+} from "../../components/charts";
 import { useEditMode } from "../../hooks/useEditMode";
 
 export function PlaceholderDashboard() {
@@ -13,17 +20,48 @@ export function PlaceholderDashboard() {
 
 	return (
 		<DashboardGrid draggable={isEditing}>
-			<div key="kpi-1" data-grid={{ w: 3, h: 2 }}>
-				<KPICard label="Revenue" value="$1.2M" change={12.5} changeLabel="vs last month" />
+			<div key="kpi-1" data-grid={{ w: 3, h: 3 }}>
+				<KPICard>
+					<KPILabel>Sales</KPILabel>
+					<KPIValue>Rs. 1,02,89,283</KPIValue>
+					<KPITrend value={12} label="vs last month" />
+					<KPIStats>
+						<KPIStat label="Target" value="78%" progress={78} />
+					</KPIStats>
+				</KPICard>
 			</div>
-			<div key="kpi-2" data-grid={{ w: 3, h: 2 }}>
-				<KPICard label="Expenses" value="$840K" change={-3.2} changeLabel="vs last month" />
+
+			<div key="kpi-2" data-grid={{ w: 3, h: 3 }}>
+				<KPICard>
+					<KPILabel>Orders</KPILabel>
+					<KPIValue>1,284</KPIValue>
+					<KPITrend value={8} label="vs last month" />
+					<KPIStats>
+						<KPIStat label="Forecast" value="1,600" progress={80} />
+					</KPIStats>
+				</KPICard>
 			</div>
-			<div key="kpi-3" data-grid={{ w: 3, h: 2 }}>
-				<KPICard label="Net Profit" value="$360K" change={8.1} changeLabel="vs last month" />
+
+			<div key="kpi-3" data-grid={{ w: 3, h: 3 }}>
+				<KPICard>
+					<KPILabel>Net Profit</KPILabel>
+					<KPIValue>Rs. 34,44,083</KPIValue>
+					<KPITrend value={-5} label="vs last month" />
+					<KPIStats>
+						<KPIStat label="Margin" value="12.5%" />
+					</KPIStats>
+				</KPICard>
 			</div>
-			<div key="kpi-4" data-grid={{ w: 3, h: 2 }}>
-				<KPICard label="Cash Flow" value="$290K" change={5.4} changeLabel="vs last month" />
+
+			<div key="kpi-4" data-grid={{ w: 3, h: 3 }}>
+				<KPICard>
+					<KPILabel>Cash Position</KPILabel>
+					<KPIValue>Rs. 45,20,000</KPIValue>
+					<KPITrend value={8} label="vs last month" />
+					<KPIStats>
+						<KPIStat label="Runway" value="24 days" />
+					</KPIStats>
+				</KPICard>
 			</div>
 
 			<div key="trend" data-grid={{ w: 6, h: 3 }}>
