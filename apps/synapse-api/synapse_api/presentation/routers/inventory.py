@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends
 
+from synapse_api.domain.entities.user import User
+
 from ...domain.interfaces import AbstractInventoryRepository
-from ...infrastructure.database import User
 from ..auth import require_role
 from ..deps import get_inventory_repo
 from ..schemas.inventory import (

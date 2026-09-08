@@ -1,7 +1,8 @@
+import { Center } from "@mantine/core";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { AuthProvider } from "../hooks/useAuth";
-import { getStoredAuth } from "../data/auth";
 import { AppLayout } from "../components/layout/AppLayout";
+import { getStoredAuth } from "../data/auth";
+import { AuthProvider } from "../hooks/useAuth";
 
 export const Route = createFileRoute("/_authenticated")({
 	beforeLoad: () => {

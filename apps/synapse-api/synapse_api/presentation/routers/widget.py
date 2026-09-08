@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 
-from ...infrastructure.database import User
+from synapse_api.domain.entities.user import User
+
 from ...infrastructure.widget_resolver import widget_resolver
 from ..auth import get_current_user
 from ..schemas.widget import (

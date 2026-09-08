@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from datetime import date
+from decimal import Decimal
 
-from .common import Money, OrderStatus, Region
+from .common import Currency, Money, OrderStatus, Region
 
 
 @dataclass(frozen=True)
@@ -20,7 +21,9 @@ class PurchaseOrder:
     status: OrderStatus
     date: date
     items: list[PurchaseItem] = field(default_factory=list)
-    total: Money = field(default_factory=lambda: Money(amount=0, currency="INR"))
+    total: Money = field(
+        default_factory=lambda: Money(amount=Decimal(0), currency=Currency("INR"))
+    )
 
 
 @dataclass(frozen=True)

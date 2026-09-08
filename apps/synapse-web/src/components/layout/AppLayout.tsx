@@ -11,8 +11,10 @@ export function AppLayout({ children }: AppLayoutProps) {
 	return (
 		<AppShell
 			header={{ height: 56 }}
-			navbar={{ width: 260, breakpoint: "md" }}
+			navbar={{ width: 72, breakpoint: "md" }}
 			padding="md"
+			withBorder={false}
+			layout="alt"
 		>
 			<AppShell.Header>
 				<Header />

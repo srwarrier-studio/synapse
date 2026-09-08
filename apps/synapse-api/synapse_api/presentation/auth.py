@@ -8,7 +8,9 @@ from jose import JWTError, jwt
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..infrastructure.database import User, get_db
+from synapse_api.domain.entities.user import User
+from synapse_api.infrastructure.persistence.sqlalchemy.core.db import get_db
+from synapse_api.infrastructure.persistence.sqlalchemy.models import user_table
 
 SECRET_KEY = os.getenv(
     "SYNAPSE_JWT_SECRET", "synapse-dev-secret-key-change-in-production"
@@ -24,9 +26,7 @@ def hash_password(password: str) -> str:
 
 
 def verify_password(plain_password: str, password_hash: str) -> bool:
-    return bcrypt.checkpw(
-        plain_password.encode("utf-8"), password_hash.encode("utf-8")
-    )
+    return bcrypt.checkpw(plain_password.encode("utf-8"), password_hash.encode("utf-8"))
 
 
 def create_access_token(data: dict) -> str:
@@ -53,7 +53,7 @@ async def get_current_user(
     except JWTError as err:
         raise credentials_exception from err
 
-    result = await db.execute(select(User).where(User.id == int(user_id)))
+    result = await db.execute(select(user_table).where(user_table.c.id == user_id))
     user = result.scalar_one_or_none()
 
     if user is None or not user.is_active:
@@ -69,4 +69,5 @@ def require_role(*roles: str):
                 detail=f"Role '{user.role}' does not have access to this resource",
             )
         return user
+
     return role_checker

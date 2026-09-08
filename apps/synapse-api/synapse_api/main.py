@@ -2,15 +2,15 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from synapse_api.infrastructure.database import init_db
+from synapse_api.infrastructure.persistence.scripts.init_script import seed
+from synapse_api.infrastructure.persistence.sqlalchemy.core.mapper import map_columns
 from synapse_api.presentation.app import create_app
-from synapse_api.seed import seed
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await init_db()
     await seed()
+    map_columns()
     yield
 
 

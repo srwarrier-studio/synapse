@@ -7,9 +7,9 @@ class LoginRequest(BaseModel):
 
 
 class UserInfo(BaseModel):
-    id: int
+    id: str
     username: str
-    role: str
+    role_id: str | None = None
     full_name: str | None = None
     avatar_url: str | None = None
     email: str | None = None

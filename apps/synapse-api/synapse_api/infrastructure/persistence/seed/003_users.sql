@@ -1,0 +1,1 @@
+INSERT INTO users(id, username, password_hash, is_active,role_id, email, full_name) VALUES ("5625d6d3a9e54d499762946e72547392", "admin", "$2b$12$rPlZ3Y/e8ZYUQh0F24XjnuHO6JXwj73uOuwL85xKMIlzQsfQE1pz2", true, "626ecbb368444e6cbb0a70cb3ef19c7b", "admin@sami.synapse", "Admin");

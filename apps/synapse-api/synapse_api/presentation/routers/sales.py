@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 
+from synapse_api.domain.entities.user import User
+
 from ...domain.interfaces import AbstractSalesRepository
-from ...infrastructure.database import User
 from ..auth import require_role
 from ..deps import get_sales_repo
 from ..schemas.sales import SalesOrderListResponse, SalesOrderSchema

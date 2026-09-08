@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends
 
+from synapse_api.domain.entities.user import User
+
 from ...domain.interfaces import AbstractPurchasesRepository
-from ...infrastructure.database import User
 from ..auth import require_role
 from ..deps import get_purchases_repo
 from ..schemas.purchases import (

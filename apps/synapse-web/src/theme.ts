@@ -41,6 +41,7 @@ const neutralGray = [
 
 export const theme = createTheme({
 	primaryColor: "synapse-blue",
+	white: "#f0f2f1",
 	colors: {
 		"synapse-blue": synapseBlue,
 		"sami-green": samiGreen,
@@ -72,7 +73,18 @@ export const theme = createTheme({
 			"#4d2e00",
 			"#1a1000",
 		],
-		tooltip: ["#616161", "#616161", "#616161", "#616161", "#616161", "#616161", "#616161", "#616161", "#616161", "#616161"],
+		tooltip: [
+			"#616161",
+			"#616161",
+			"#616161",
+			"#616161",
+			"#616161",
+			"#616161",
+			"#616161",
+			"#616161",
+			"#616161",
+			"#616161",
+		],
 	},
 	fontFamily:
 		'"Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif',
@@ -306,15 +318,17 @@ export const theme = createTheme({
 			},
 			styles: () => ({
 				navbar: {
-					backgroundColor: "#fafafa",
-					borderRight: "1px solid #e0e0e0",
+					backgroundColor: "rgba(255, 255, 255, 0.6)",
+					// backdropFilter: "blur(16px) saturate(180%)",
+					// WebkitBackdropFilter: "blur(16px) saturate(180%)",
 				},
 				header: {
-					backgroundColor: "#fafafa",
-					borderBottom: "1px solid #e0e0e0",
+					backgroundColor: "rgba(255, 255, 255, 0.6)",
+					// backdropFilter: "blur(16px) saturate(180%)",
+					// WebkitBackdropFilter: "blur(16px) saturate(180%)",
 				},
 				main: {
-					backgroundColor: "#ffffff",
+					backgroundColor: "rgba(255, 255, 255, 0.6)",
 				},
 			}),
 		},
@@ -821,7 +835,8 @@ export const theme = createTheme({
 					boxShadow: "0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)",
 					transition: "box-shadow 0.2s ease, transform 0.2s ease",
 					"&:hover": {
-						boxShadow: "0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04)",
+						boxShadow:
+							"0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04)",
 					},
 				},
 			}),
