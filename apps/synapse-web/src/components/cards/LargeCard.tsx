@@ -1,5 +1,6 @@
 import { Card } from "@mantine/core";
 import type { ReactNode } from "react";
+import classes from "./cards.module.css";
 
 interface LargeCardProps {
 	children: ReactNode;
@@ -7,18 +8,7 @@ interface LargeCardProps {
 
 export function LargeCard({ children }: LargeCardProps) {
 	return (
-		<Card
-			withBorder
-			radius="md"
-			p="md"
-			style={{
-				gridColumn: "span 12",
-				gridRow: "span 12",
-				display: "flex",
-				flexDirection: "column",
-				overflow: "hidden",
-			}}
-		>
+		<Card withBorder className={classes.card} h="100%">
 			{children}
 		</Card>
 	);

@@ -346,21 +346,6 @@ export const theme = createTheme({
 				},
 			}),
 		},
-		Card: {
-			defaultProps: {
-				shadow: "xs",
-				radius: "md",
-				withBorder: true,
-			},
-			styles: () => ({
-				root: {
-					boxShadow: "none",
-					borderRadius: "2px",
-					border: "1px solid #e0e0e0",
-					padding: "16px",
-				},
-			}),
-		},
 		Stack: {
 			defaultProps: {
 				gap: "md",
