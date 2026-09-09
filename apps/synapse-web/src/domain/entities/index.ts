@@ -1,3 +1,4 @@
+export type { NavItem } from "./navigation";
 export type { User, UserRole, AuthState } from "./auth";
 export type { Currency, Money, OrderStatus, Region } from "./common";
 export type {

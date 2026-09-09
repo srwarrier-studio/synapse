@@ -1,8 +1,8 @@
 import { Group } from "@mantine/core";
-import { EditButton } from "./components/edit-button";
-import { NotificationButton } from "./components/notification-button";
-import { UserMenu } from "./components/user-menu";
-import { WelcomeText } from "./components/welcome-text";
+import { EditButton } from "./EditButton";
+import { NotificationButton } from "./NotificationButton";
+import { UserMenu } from "./UserMenu";
+import { WelcomeText } from "./WelcomeText";
 
 export function Header() {
 	return (

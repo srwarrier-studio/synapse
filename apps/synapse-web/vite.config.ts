@@ -1,3 +1,4 @@
+import path from "node:path";
 import babel from "@rolldown/plugin-babel";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
@@ -13,4 +14,9 @@ export default defineConfig({
 		react(),
 		babel({ presets: [reactCompilerPreset()] }),
 	],
+	resolve: {
+		alias: {
+			"@": path.resolve(__dirname, "./src"),
+		},
+	},
 });

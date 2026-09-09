@@ -7,7 +7,7 @@ import {
 	IconSettings,
 	IconWallet,
 } from "@tabler/icons-react";
-import type { NavItem } from "../../components/layout/components/menu-button";
+import type { NavItem } from "../entities/navigation";
 
 export const NAV_ITEMS: NavItem[] = [
 	{ label: "Dashboard", icon: IconDashboard, to: "/dashboard" },

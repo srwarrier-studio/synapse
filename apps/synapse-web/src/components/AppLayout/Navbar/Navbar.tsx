@@ -1,7 +1,7 @@
 import { Center, Image, Stack } from "@mantine/core";
 import { useLocation } from "@tanstack/react-router";
-import { NAV_ITEMS } from "../../domain/constants/navitems";
-import { MenuButton } from "./components/menu-button";
+import { NAV_ITEMS } from "../../../domain/constants/navitems";
+import { MenuButton } from "./MenuButton";
 
 export function Navbar() {
 	const location = useLocation();

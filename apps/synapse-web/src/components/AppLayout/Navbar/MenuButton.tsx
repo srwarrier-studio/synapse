@@ -1,15 +1,9 @@
 import { ActionIcon, Tooltip } from "@mantine/core";
-import type { IconDashboard } from "@tabler/icons-react";
 import { useNavigate } from "@tanstack/react-router";
-
-export interface NavItem {
-    label: string;
-    icon: typeof IconDashboard;
-    to: string;
-}
+import type { NavItem } from "@/domain/entities/navigation";
 
 interface MenuButtonProps extends NavItem {
-    active?: boolean;
+	active?: boolean;
 }
 
 export function MenuButton({ label, icon: Icon, to, active }: MenuButtonProps) {

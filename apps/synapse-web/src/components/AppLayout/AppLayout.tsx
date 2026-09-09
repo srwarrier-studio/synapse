@@ -1,8 +1,8 @@
 import { AppShell } from "@mantine/core";
 import type { ReactNode } from "react";
-import { EditModeProvider } from "../../hooks/useEditMode";
-import { Header } from "./Header";
-import { Navbar } from "./Navbar";
+import { Header } from "@/components/AppLayout/Header/Header";
+import { Navbar } from "@/components/AppLayout/Navbar/Navbar";
+import { EditModeProvider } from "@/hooks/useEditMode";
 
 interface AppLayoutProps {
 	children: ReactNode;
