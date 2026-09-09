@@ -17,12 +17,14 @@ import {
 	IconEdit,
 	IconCheck,
 } from "@tabler/icons-react";
-import { DashboardGrid } from "../../../components/dashboard/DashboardGrid";
+import { DashboardGrid } from "../../../components/cards/DashboardGrid";
+import { WidgetRenderer } from "../../../components/dashboard/WidgetRenderer";
 import { DashboardSidebar } from "../../../components/dashboard/DashboardSidebar";
 import { InsightPanel } from "../../../components/insights/InsightPanel";
 import { useDashboard } from "../../../hooks/useDashboard";
 import { useDashboardLayout } from "../../../hooks/useDashboardLayout";
 import { useInsights } from "../../../hooks/useInsights";
+import { WIDGET_CONSTRAINTS } from "../../../domain/constants/dashboard-layout";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
 	component: DashboardIndex,
@@ -135,21 +137,41 @@ function DashboardIndex() {
 				<LoadingSkeletons />
 			) : (
 				<DashboardGrid
-					widgets={widgets}
-					gridLayout={gridLayout}
-					onLayoutChange={onLayoutChange}
-					onRemoveWidget={isEditing ? removeWidget : undefined}
-					isEditing={isEditing}
-					summary={summary}
-					salesTrend={salesTrend}
-					topProducts={topProducts}
-					regionPerformance={regionPerformance}
-					orderStatus={orderStatus}
-					monthlyRevenue={monthlyRevenue}
-					categoryBreakdown={categoryBreakdown}
-					recentOrders={recentOrders}
-					onDrillDown={handleDrillDown}
-				/>
+					layout={gridLayout.map((item) => ({
+						...item,
+						static: !isEditing,
+					}))}
+					onLayoutChange={isEditing ? onLayoutChange : undefined}
+					draggable={isEditing}
+				>
+					{widgets.map((widget) => {
+						const constraints = WIDGET_CONSTRAINTS[widget.type];
+						return (
+							<div
+								key={widget.id}
+								data-grid={{
+									w: constraints.defaultW,
+									h: constraints.defaultH,
+									minW: constraints.minW,
+									minH: constraints.minH,
+								}}
+							>
+								<WidgetRenderer
+									widget={widget}
+									summary={summary}
+									salesTrend={salesTrend}
+									topProducts={topProducts}
+									regionPerformance={regionPerformance}
+									orderStatus={orderStatus}
+									monthlyRevenue={monthlyRevenue}
+									categoryBreakdown={categoryBreakdown}
+									recentOrders={recentOrders}
+									onDrillDown={handleDrillDown}
+								/>
+							</div>
+						);
+					})}
+				</DashboardGrid>
 			)}
 
 			<Drawer

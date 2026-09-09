@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { Layout } from "react-grid-layout";
+import { WIDGET_CONSTRAINTS } from "../domain/constants/dashboard-layout";
 import type {
 	DashboardLayout,
 	DashboardWidget,
 	GridLayoutItem,
 	WidgetType,
 } from "../domain/entities/dashboard-layout";
-import { WIDGET_CONSTRAINTS } from "../domain/constants/dashboard-layout";
 import { dashboardTemplates } from "../domain/entities/dashboard-templates";
 
 const STORAGE_KEY = "synapse-dashboard-layout:v1";

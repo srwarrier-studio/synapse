@@ -1,5 +1,5 @@
 .card {
-	background-color: white !important;
+	background-color: white;
 	border-radius: var(--mantine-radius-lg);
 	height: 100%;
 }
